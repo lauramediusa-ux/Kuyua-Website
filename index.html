@@ -1,906 +1,790 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spaghettification — Design & Development Studio</title>
-<style>
-  @font-face {
-    font-family: 'Neue Haas Grotesk Display Pro';
-    src: local('Neue Haas Grotesk Display Pro'), local('NeueHaasGroteskDisplayPro');
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuyua — Nature and Climate Risk Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --blue:    #000AFF;
-    --black:   #080808;
-    --white:   #FFFFFF;
-    --light:   #F0F0EE;
-    --display: 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', 'Arial Black', Helvetica, sans-serif;
-    --body:    'Helvetica Neue', Helvetica, Arial, sans-serif;
-  }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #000;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { font-size: 16px; scroll-behavior: smooth; }
+    a { text-decoration: none; color: inherit; }
 
-  body {
-    background: var(--blue);
-    color: var(--white);
-    font-family: var(--body);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
+    /* ─── NAVBAR ─────────────────────────────────────────── */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 56px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
 
-  /* ── NOISE OVERLAY ── */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-  }
+    .navbar-logo svg {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
 
-  /* ── SCROLL REVEAL ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
-  }
-  .reveal.in-view { opacity: 1; transform: translateY(0); }
-  .reveal-d1 { transition-delay: 0.05s; }
-  .reveal-d2 { transition-delay: 0.12s; }
-  .reveal-d3 { transition-delay: 0.19s; }
-  .reveal-d4 { transition-delay: 0.26s; }
-  .reveal-d5 { transition-delay: 0.33s; }
-  .reveal-d6 { transition-delay: 0.40s; }
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      font-family: 'Poppins', sans-serif;
+    }
 
-  /* ══════════════════════════════════
-     NAV
-  ══════════════════════════════════ */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem 3rem;
-    z-index: 200;
-  }
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid #000;
+      border-radius: 100px;
+      padding: 4px 6px;
+      gap: 2px;
+      font-size: 13px;
+      font-weight: 500;
+    }
 
-  /* ── NAV LOGO SWITCHER ── */
-  .logo-switcher {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    height: 22px;
-    min-width: 38px; /* keeps link clickable at icon size */
-  }
-  .logo-switcher {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    height: 22px;
-    min-width: 38px;
-    /* clip-path clips top & bottom at the element's edges,
-       but extends ±9999px left & right so the wide wordmark is never cropped */
-    clip-path: inset(0 -9999px 0 -9999px);
-  }
-  .logo-icon,
-  .logo-full {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 22px;
-    width: auto;
-    display: block;
-    transition: transform 0.55s cubic-bezier(0.16,1,0.3,1);
-  }
-  /* Default: hero visible → icon in frame, wordmark waits below */
-  .logo-icon { transform: translateY(0); }
-  .logo-full  { transform: translateY(150%); }
-  /* Scrolled past hero → icon exits upward, wordmark rises into frame */
-  .nav-logo.hero-passed .logo-icon { transform: translateY(-150%); }
-  .nav-logo.hero-passed .logo-full  { transform: translateY(0); }
+    .lang-toggle span {
+      padding: 3px 9px;
+      border-radius: 100px;
+      cursor: pointer;
+    }
 
-  .nav-links { display: flex; gap: 3.5rem; list-style: none; }
-  .nav-links a {
-    color: var(--white);
-    text-decoration: none;
-    font-family: var(--display);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 500;
-    transition: opacity 0.3s;
-  }
-  .nav-links a:hover { opacity: 0.5; }
+    .lang-toggle span.active {
+      background: #000;
+      color: #fff;
+      font-weight: 600;
+    }
 
-  /* Hamburger */
-  .nav-burger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 4px;
-  }
-  .nav-burger span {
-    display: block;
-    width: 24px; height: 1.5px;
-    background: white;
-    transition: transform 0.3s, opacity 0.3s;
-  }
-  .nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-  .nav-burger.open span:nth-child(2) { opacity: 0; }
-  .nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-size: 14px;
+    }
 
-  .mobile-menu {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: var(--blue);
-    z-index: 190;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2.5rem;
-  }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a {
-    color: white;
-    text-decoration: none;
-    font-family: var(--display);
-    font-size: 2.5rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-  }
+    .nav-links a { transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 0.5; }
 
-  /* ══════════════════════════════════
-     HERO
-  ══════════════════════════════════ */
-  .hero {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-top: 120px;   /* clears the nav */
-    overflow: hidden;
-    background: var(--blue);
-  }
+    .btn-login {
+      background: #3AE374;
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      padding: 10px 26px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-login:hover { opacity: 0.85; }
 
-  /* ── SCATTERED LABELS ── */
-  .scatter-label {
-    position: absolute;
-    font-family: var(--body);
-    font-size: 0.68rem;
-    line-height: 1.55;
-    color: var(--white);
-    opacity: 0.55;
-    z-index: 50;
-    pointer-events: none;
-    letter-spacing: 0.01em;
-  }
-  .sl-1 { top: 130px; left: 3rem; }
-  .sl-2 { top: 130px; right: 3rem; text-align: right; }
+    /* ─── HERO ───────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 96px 60px 72px;
+      overflow: hidden;
+    }
 
-  /* ── HERO MIDDLE (logo + strip) ── */
-  .hero-middle {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    padding: 1rem 0 1.5rem;
-  }
+    .hero-headline {
+      font-size: clamp(52px, 8vw, 108px);
+      font-weight: 400;
+      line-height: 1.07;
+      letter-spacing: -3px;
+      margin-bottom: 28px;
+    }
 
-  /* ── GIANT LOGO — near full-bleed ── */
-  .giant-logo {
-    width: 98vw;                /* fills almost the entire viewport width */
-    pointer-events: none;
-    z-index: 1;
-    padding: 0 1vw;             /* tiny breathing room on each side */
-  }
-  .giant-logo svg {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
+    /* Inline icon chips — each SVG is self-contained with its own bg */
+    .chip {
+      display: inline-block;
+      height: 0.78em;
+      width: auto;
+      vertical-align: middle;
+      margin: 0 6px;
+      position: relative;
+      top: -0.06em;
+    }
 
-  /* ══════════════════════════════════
-     SCROLLING STRIP  (right → left)
-  ══════════════════════════════════ */
-  .scroll-strip {
-    width: 100%;
-    overflow: hidden;
-    z-index: 2;
-    cursor: default;
-  }
+    .chip svg {
+      height: 100%;
+      width: auto;
+      display: block;
+    }
 
-  .scroll-track {
-    display: flex;
-    gap: 0;                     /* no space between cards */
-    width: max-content;
-    animation: scrollLeft 45s linear infinite;
-  }
+    /* The € chip in the subheading */
+    .chip-eur {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #E5E7EB;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-size: 0.75em;
+      color: #444;
+      vertical-align: middle;
+      margin: 0 4px;
+      position: relative;
+      top: -0.05em;
+    }
 
-  /* pause on hover */
-  .scroll-strip:hover .scroll-track {
-    animation-play-state: paused;
-  }
+    .hero-sub {
+      font-size: clamp(20px, 2.8vw, 34px);
+      color: #C2C2C2;
+      letter-spacing: -0.3px;
+    }
 
-  @keyframes scrollLeft {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }   /* -50% = one full set width */
-  }
+    /* Hero placeholder */
+    .hero-placeholder-wrap {
+      margin: 64px auto 0;
+      max-width: 900px;
+    }
 
-  .s-card {
-    width: 420px;
-    height: 420px;              /* large square cards */
-    border-radius: 0;           /* sharp edges, no rounding */
-    flex-shrink: 0;
-    box-shadow: none;           /* no shadow */
-    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
-    position: relative;
-    overflow: hidden;
-  }
+    .hero-placeholder {
+      background: #F3F4F6;
+      border-radius: 20px;
+      aspect-ratio: 16 / 9;
+    }
 
-  /* no overlay on cards */
-  .s-card::after { content: none; }
-
-  .s-card:hover {
-    transform: scale(1.03) translateY(-6px);
-    z-index: 10;
-  }
-
-  /* ── BOTTOM LABELS ROW ── */
-  .hero-labels {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0 3rem 3rem;
-    z-index: 100;
-    position: relative;
-    gap: 2rem;
-  }
-
-  .hero-label {
-    font-family: var(--display);
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    line-height: 1.5;
-    opacity: 0.85;
-    white-space: nowrap;
-  }
-
-  /* ══════════════════════════════════
-     CLAIM STATEMENT (below hero)
-  ══════════════════════════════════ */
-  .claim-section {
-    background: var(--blue);
-    padding: 8rem 4rem;
-  }
-
-  .claim-text {
-    font-family: var(--display);
-    font-weight: 400;             /* regular — not bold */
-    font-size: clamp(1.8rem, 3.6vw, 4.2rem);
-    text-transform: uppercase;
-    text-align: center;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: var(--white);
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  /* ══════════════════════════════════
-     SHARED SECTION STYLES
-  ══════════════════════════════════ */
-  .section { padding: 7rem 3rem; position: relative; }
-
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    border-top: 1px solid currentColor;
-    padding-top: 1.5rem;
-    margin-bottom: 5rem;
-    opacity: 0.9;
-  }
-  .section-tag {
-    font-family: var(--display);
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    opacity: 0.45;
-  }
-  .section-title {
-    font-family: var(--display);
-    font-size: clamp(2.2rem, 4vw, 4rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-
-  /* ══════════════════════════════════
-     WORKS  (#080808)
-  ══════════════════════════════════ */
-  #works { background: var(--black); color: var(--white); }
-
-  .works-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.6rem;
-  }
-  .work-card { cursor: pointer; }
-  .work-thumb {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 1.1rem;
-    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
-    /* TO ADD IMAGE: background: url('images/project.jpg') center / cover no-repeat; */
-  }
-  .work-card:hover .work-thumb { transform: scale(0.97); }
-  .work-divider {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(255,255,255,0.12);
-    padding-top: 0.9rem;
-  }
-  .work-title {
-    font-family: var(--display);
-    font-size: 0.92rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .work-cat {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.4;
-  }
-
-  /* ══════════════════════════════════
-     SERVICES  (#000AFF)
-  ══════════════════════════════════ */
-  #services { background: var(--blue); color: var(--white); }
-
-  .services-list { display: flex; flex-direction: column; }
-  .service-item {
-    display: grid;
-    grid-template-columns: 60px 1fr 38%;
-    align-items: start;
-    gap: 3rem;
-    padding: 3rem 0;
-    border-top: 1px solid rgba(255,255,255,0.25);
-  }
-  .service-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.25); }
-  .service-num {
-    font-family: var(--display);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    opacity: 0.35;
-    padding-top: 0.6rem;
-  }
-  .service-name {
-    font-family: var(--display);
-    font-size: clamp(1.8rem, 2.8vw, 2.8rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-  .service-desc {
-    font-size: 0.88rem;
-    line-height: 1.75;
-    opacity: 0.65;
-    padding-top: 0.55rem;
-  }
-
-  /* ══════════════════════════════════
-     ABOUT  (#F0F0EE)
-  ══════════════════════════════════ */
-  #about { background: var(--light); color: var(--black); }
-  #about .section-header { border-top-color: rgba(0,0,0,0.2); }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: start;
-  }
-  .about-statement {
-    font-family: var(--display);
-    font-size: clamp(2rem, 3.2vw, 3.2rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-  }
-  .about-body {
-    font-size: 0.92rem;
-    line-height: 1.85;
-    opacity: 0.6;
-    margin-top: 2rem;
-    max-width: 440px;
-  }
-  .about-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-    margin-top: 4rem;
-    padding-top: 3rem;
-    border-top: 1px solid rgba(0,0,0,0.12);
-  }
-  .stat-val {
-    font-family: var(--display);
-    font-size: clamp(2.5rem, 4vw, 4rem);
-    font-weight: 700;
-    letter-spacing: -0.05em;
-    line-height: 1;
-  }
-  .stat-lbl {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    opacity: 0.4;
-    margin-top: 0.5rem;
-  }
-  /* Selected clients list */
-  .about-clients { width: 100%; }
-
-  .about-clients-title {
-    font-family: var(--display);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    opacity: 0.4;
-    padding-bottom: 1.2rem;
-    border-bottom: 1px solid rgba(0,0,0,0.15);
-    margin-bottom: 0;
-  }
-
-  .client-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    transition: opacity 0.2s;
-  }
-  .client-row:hover { opacity: 0.6; }
-
-  .client-name {
-    font-family: var(--display);
-    font-size: 1.05rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-
-  .client-city {
-    font-family: var(--body);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.35;
-  }
-
-  /* ══════════════════════════════════
-     CONTACT  (#080808)
-  ══════════════════════════════════ */
-  #contact {
-    background: var(--black);
-    color: var(--white);
-    text-align: center;
-    padding: 8rem 3rem 6rem;
-  }
-  .contact-eyebrow {
-    font-family: var(--display);
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    opacity: 0.4;
-    margin-bottom: 2rem;
-  }
-  .contact-cta {
-    font-family: var(--display);
-    font-size: clamp(3.5rem, 9vw, 10rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: -0.04em;
-    line-height: 0.88;
-    margin-bottom: 3.5rem;
-  }
-  .contact-email {
-    display: inline-block;
-    font-family: var(--display);
-    font-size: 1rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: white;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(255,255,255,0.35);
-    padding-bottom: 0.25rem;
-    transition: border-color 0.3s, opacity 0.3s;
-  }
-  .contact-email:hover { border-color: white; opacity: 0.7; }
-
-  /* ══════════════════════════════════
-     FOOTER
-  ══════════════════════════════════ */
-  footer {
-    background: var(--black);
-    color: var(--white);
-    padding: 1.5rem 3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    font-family: var(--display);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.35;
-  }
-  footer a { color: white; text-decoration: none; opacity: 0.6; transition: opacity 0.3s; }
-  footer a:hover { opacity: 1; }
-  .footer-links { display: flex; gap: 2.5rem; }
-
-  /* ══════════════════════════════════
-     RESPONSIVE
-  ══════════════════════════════════ */
-  @media (max-width: 1024px) {
-    .service-item { grid-template-columns: 50px 1fr; }
-    .service-desc { grid-column: 2; padding-top: 0; margin-top: -0.5rem; }
-    .works-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 768px) {
-    /* ── NAV ── */
-    nav { padding: 1.5rem; }
-    .nav-links { display: none; }
-    .nav-burger { display: flex; }
-
-    /* On mobile: always show the icon, never switch to the full wordmark */
-    .logo-full { display: none; }
-    .nav-logo.hero-passed .logo-icon { transform: translateY(0); }
-
-    /* ── HERO ── */
-    .hero { padding-top: 80px; }
-    .hero-middle { gap: 2rem; padding: 1rem 0 0; }
-    .giant-logo { width: 96vw; padding: 0 2vw; }
-
-    /* Cards: nearly full-width squares — big and impactful */
-    .s-card { width: 300vw; height: 300vw; }
-
-    /* Slow the strip — bigger cards need more time to appreciate */
-    .scroll-track { animation-duration: 40s; }
-
-    /* Labels row */
-    .hero-labels {
-      padding: 1.5rem 1.5rem 2rem;
-      gap: 1.2rem;
+    /* ─── LOGOS ──────────────────────────────────────────── */
+    .logos-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 52px;
+      padding: 36px 60px;
+      border-top: 1px solid #F0F0F0;
+      border-bottom: 1px solid #F0F0F0;
+      margin-top: 80px;
       flex-wrap: wrap;
     }
-    .hero-label { font-size: 0.65rem; white-space: normal; }
-    .scatter-label { display: none; }
 
-    /* ── SECTIONS ── */
-    .section { padding: 5rem 1.5rem; }
-    .works-grid { grid-template-columns: 1fr; }
-    .service-item { grid-template-columns: 1fr; gap: 1rem; padding: 2.5rem 0; }
-    .service-num { padding-top: 0; }
-    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .contact-cta { font-size: clamp(2.8rem, 14vw, 5rem); }
-    footer { flex-direction: column; gap: 1rem; text-align: center; }
-    .footer-links { gap: 1.5rem; }
-  }
-</style>
+    .logo-item {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #C8C8C8;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ─── HOW DOES IT WORK ───────────────────────────────── */
+    .how-section {
+      padding: 100px 60px;
+    }
+
+    .how-section > h2 {
+      font-size: clamp(40px, 5.5vw, 76px);
+      font-weight: 400;
+      text-align: center;
+      letter-spacing: -2px;
+      line-height: 1.08;
+      margin-bottom: 100px;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 96px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .step-row {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .step-row.rev { direction: rtl; }
+    .step-row.rev > * { direction: ltr; }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 100px;
+      padding: 4px 14px 4px 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .badge-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.12);
+    }
+
+    .bg-green  { background: #DCFCE7; color: #15803D; }
+    .bg-orange { background: #FEF3C7; color: #92400E; }
+    .bg-purple { background: #F3E8FF; color: #7E22CE; }
+    .bg-red    { background: #FEE2E2; color: #991B1B; }
+
+    .step-icon-box {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .step-title {
+      font-size: clamp(24px, 2.8vw, 38px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 18px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.78;
+    }
+
+    /* Step image placeholder */
+    .step-placeholder {
+      border-radius: 14px;
+      background: #F3F4F6;
+      aspect-ratio: 4 / 3;
+      width: 100%;
+    }
+
+    /* ─── FEATURES SPLIT ─────────────────────────────────── */
+    .features-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin: 0 56px 100px;
+      border-radius: 24px;
+      overflow: hidden;
+      gap: 4px;
+      background: #111;
+    }
+
+    .feat-card {
+      padding: 52px;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feat-card.climate { background: #0d1117; color: #fff; }
+    .feat-card.nature  { background: #071610; color: #fff; }
+
+    .feat-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #3AE374;
+      margin-bottom: 10px;
+    }
+
+    .feat-title {
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .feat-desc {
+      font-size: 14px;
+      opacity: 0.6;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    /* Feature placeholder */
+    .feat-placeholder {
+      flex: 1;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      min-height: 160px;
+    }
+
+    /* ─── CTA ────────────────────────────────────────────── */
+    .cta-section {
+      padding: 100px 60px;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(30px, 4.5vw, 58px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .cta-section p {
+      font-size: 16px;
+      color: #888;
+      margin-bottom: 40px;
+    }
+
+    .cta-form {
+      max-width: 360px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cta-form input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      color: #000;
+    }
+    .cta-form input:focus { border-color: #000; }
+    .cta-form input::placeholder { color: #ABABAB; }
+
+    .cta-form button {
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .cta-form button:hover { opacity: 0.8; }
+
+    /* ─── COMPLIANCE ─────────────────────────────────────── */
+    .compliance-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      padding: 40px 60px;
+      border-top: 1px solid #F0F0F0;
+      flex-wrap: wrap;
+    }
+
+    .comp-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: #AAA;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .comp-icon {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      background: #F5F5F5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+
+    /* ─── NEWSROOM ───────────────────────────────────────── */
+    .newsroom {
+      padding: 80px 60px 100px;
+    }
+
+    .newsroom-header {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(20px, 2.5vw, 32px);
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .news-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #EBEBEB;
+      cursor: pointer;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .news-card:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+    }
+
+    /* News thumbnail placeholder */
+    .news-thumb {
+      background: #F3F4F6;
+      aspect-ratio: 2 / 1;
+      width: 100%;
+    }
+
+    .news-body { padding: 20px 22px 24px; }
+
+    .news-cat {
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #3AE374;
+      margin-bottom: 8px;
+    }
+
+    .news-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .news-desc {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.55;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 64px 56px 40px;
+    }
+
+    .footer-wordmark {
+      font-size: clamp(80px, 14vw, 168px);
+      font-weight: 900;
+      letter-spacing: -6px;
+      line-height: 0.9;
+      margin-bottom: 52px;
+    }
+
+    .footer-cols {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 52px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .footer-col-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      color: rgba(255,255,255,0.68);
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: #fff; }
+
+    .footer-bottom {
+      border-top: 1px solid #222;
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      color: #555;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links a { color: #555; transition: color 0.2s; }
+    .footer-bottom-links a:hover { color: #fff; }
+  </style>
 </head>
 <body>
 
-  <!-- ══════════════════════════════════
-       NAV
-  ══════════════════════════════════ -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <div class="logo-switcher">
-        <!-- Icon mark (shown while big hero logo is on screen) -->
-        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101.76 60.03"><g fill="white"><path d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.99-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9,9,.48,22.59-.66,27.64-2.2,2.25-.69,4.85-1.64,7.39-3.38,2.54-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path d="M32.04,23.77c2.12,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s.01-.09.01-.1c.12-1.03.83-11.87-15.32-11.37Z"/><path d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
-        <!-- Full wordmark (shown after scrolling past hero) -->
-        <svg class="logo-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108.09 60.03"><g fill="white"><path d="M178.01,22.27c0-12.97-9.06-21.38-22.29-21.38h-45.76v58.23h14.98v-15.56h30.78c13.23,0,22.29-8.32,22.29-21.3ZM151.56,31.01h-26.62V13.46h26.62c4.49,0,11.48,0,11.48,8.81s-6.99,8.74-11.48,8.74Z"/><path d="M199.93.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L220.14.89h-20.21ZM198.18,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><path d="M283.49,12.62c15.8,0,19.8,6.57,20.63,10.98h15.23C318.43,9.13,306.78.06,283.49.06s-37.11,10.65-37.11,29.95,13.15,29.95,34.61,29.95c12.4,0,21.13-4,26.62-9.98l.67,9.15h11.06v-31.19h-36.94v9.73h21.71c-.33,4.41-6.15,10.74-20.63,10.74-19.39,0-22.13-10.98-22.13-18.05s2.66-17.72,22.13-17.72Z"/><polygon points="394.53 23.69 347.12 23.69 347.12 .89 332.14 .89 332.14 59.12 347.12 59.12 347.12 36.33 394.53 36.33 394.53 59.12 409.51 59.12 409.51 .89 394.53 .89 394.53 23.69"/><polygon points="418.98 59.12 480.54 59.12 480.54 47.23 433.96 47.23 433.96 35.42 480.54 35.42 480.54 24.6 433.96 24.6 433.96 12.79 480.54 12.79 480.54 .89 418.98 .89 418.98 59.12"/><polygon points="537.22 .89 484.65 .89 484.65 13.46 512.94 13.46 512.94 59.12 527.91 59.12 527.91 13.46 537.22 13.46 556.19 13.46 565.51 13.46 565.51 59.12 580.49 59.12 580.49 13.46 608.77 13.46 608.77 .89 556.19 .89 537.22 .89"/><rect x="613.72" y=".89" width="14.98" height="58.23"/><polygon points="635.35 59.12 650.33 59.12 650.33 40.9 691.92 40.9 691.92 28.26 650.33 28.26 650.33 13.46 696.91 13.46 696.91 .89 635.35 .89 635.35 59.12"/><rect x="701.86" y=".89" width="14.98" height="58.23"/><path d="M779.56,34.17c-1.41,9.48-8.73,13.22-21.13,13.22-15.14,0-21.63-5.49-21.63-17.47s6.41-17.3,21.63-17.3c12.48,0,19.72,3.66,21.13,13.06h15.23c-1.5-16.81-13.14-25.62-36.35-25.62-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03c23.21,0,34.86-8.9,36.35-25.79h-15.23Z"/><path d="M820.45.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L840.67.89h-20.21ZM818.71,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><polygon points="857.92 13.46 886.21 13.46 886.21 59.12 901.18 59.12 901.18 13.46 929.46 13.46 929.46 .89 857.92 .89 857.92 13.46"/><rect x="934.41" y=".89" width="14.98" height="58.23"/><path d="M990.99.06c-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03,36.6-10.73,36.6-30.03S1016.53.06,990.99.06ZM990.99,47.39c-15.56,0-21.63-5.49-21.63-17.47s5.99-17.3,21.63-17.3,21.63,5.49,21.63,17.3-6.07,17.47-21.63,17.47Z"/><polygon points="1093.11 .89 1093.11 44.65 1053.35 .89 1033.05 .89 1033.05 59.12 1048.03 59.12 1048.03 15.45 1087.71 59.12 1108.09 59.12 1108.09 .89 1093.11 .89"/><path d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.98-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9s22.59-.66,27.64-2.2c2.25-.69,4.85-1.64,7.39-3.38,2.53-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path d="M32.04,23.77c2.13,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s0-.09.01-.1c.12-1.03.83-11.86-15.32-11.37Z"/><path d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
-      </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#works">Works</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#about">About Us</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <div class="nav-burger" id="burger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </div>
-  </nav>
-
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#works"    onclick="closeMobile()">Works</a>
-    <a href="#services" onclick="closeMobile()">Services</a>
-    <a href="#about"    onclick="closeMobile()">About</a>
-    <a href="#contact"  onclick="closeMobile()">Contact</a>
+<!-- ════════════════════ NAVBAR ════════════════════ -->
+<nav class="navbar">
+  <!-- Kuyua wordmark -->
+  <div class="navbar-logo">
+    <svg viewBox="0 0 483.18 143.66" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="35.39" height="111.39" fill="#000"/>
+      <path d="M52,55.98v-.81c11.6-1.48,22.08-6.15,30.16-14.24C92.67,30.42,97.43,15.86,96.89.04c-15.82-.54-30.38,4.22-40.89,14.73-10.49,10.49-15.25,25.01-14.73,40.8h0c-.52,15.79,4.24,30.31,14.73,40.8,10.51,10.51,25.06,15.27,40.89,14.73.54-15.82-4.22-30.38-14.73-40.89-8.08-8.08-18.56-12.75-30.16-14.24Z" fill="#000"/>
+      <path d="M192.78,30.57v80.82h-31.95v-11.75h-.47c-5.48,9.87-14.41,13.63-25.06,13.63-16.6,0-27.57-9.24-27.57-32.58V30.57h32.58v44.8c0,6.42,2.82,10.65,9.24,10.65,5.33,0,10.65-2.98,10.65-10.81V30.57h32.58Z" fill="#000"/>
+      <path d="M295.54,30.57l-31.8,82.07c-10.18,26.16-20.52,31.01-45.74,31.01-3.6,0-7.83,0-14.25-.31v-25.06h14.72c6.89,0,9.87-2.35,9.87-7.67,0-1.72-.47-3.76-1.41-6.11l-29.6-73.93h34.77l4.39,14.72c3.6,12.37,6.26,22.71,10.34,39.47,4.7-16.76,7.52-27.1,11.12-39.47l4.23-14.72h33.36Z" fill="#000"/>
+      <path d="M384.35,30.57v80.82h-31.95v-11.75h-.47c-5.48,9.87-14.41,13.63-25.06,13.63-16.6,0-27.57-9.24-27.57-32.58V30.57h32.58v44.8c0,6.42,2.82,10.65,9.24,10.65,5.33,0,10.65-2.98,10.65-10.81V30.57h32.58Z" fill="#000"/>
+      <path d="M450.45,111.39c-1.25-2.51-2.19-5.95-2.35-9.4-4.39,7.52-13.16,12.06-26,12.06-17.07,0-29.76-7.83-29.76-24.9,0-14.1,8.61-22.87,30.86-25.06l14.72-1.41c6.58-.63,9.71-1.88,9.71-6.11s-3.13-5.95-9.08-5.95c-6.26,0-9.24,1.88-9.71,7.99h-32.58c.78-19.74,12.84-29.92,42.76-29.92s41.19,9.4,41.19,25.84v44.01c0,4.54.94,8.61,2.98,12.84h-32.74ZM447.63,80.53v-5.32c-1.25,1.88-3.45,2.82-7.05,3.29l-7.52.94c-5.17.63-7.68,2.82-7.68,7.05,0,4.86,3.29,7.21,9.56,7.21,8.3,0,12.69-4.39,12.69-13.16Z" fill="#000"/>
+    </svg>
   </div>
 
-  <!-- ══════════════════════════════════
-       HERO
-  ══════════════════════════════════ -->
-  <section class="hero">
+  <div class="navbar-right">
+    <div class="lang-toggle">
+      <span class="active">EN</span>
+      <span>DE</span>
+      <span>FR</span>
+    </div>
+    <div class="nav-links">
+      <a href="#">Contact us</a>
+      <a href="#">jobs</a>
+      <a href="#">Book a demo</a>
+    </div>
+    <button class="btn-login">Log in</button>
+  </div>
+</nav>
 
-    <!-- Logo + Scrolling strip (vertically centred) -->
-    <div class="hero-middle">
+<!-- ════════════════════ HERO ════════════════════ -->
+<section class="hero">
+  <h1 class="hero-headline">
+    Nature<span class="chip"><!-- Kuyua green nature icon -->
+      <svg width="153" height="91" viewBox="0 0 153 91" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="152.93" height="90.5376" rx="13.0773" fill="#45F974"/><path d="M44.6016 12.673C52.1806 12.6731 58.6813 17.5395 61.1709 24.2463C70.4917 24.6827 77.951 32.3696 77.9512 41.799C77.9512 47.354 75.4113 52.341 71.2979 55.4631C71.6853 56.9145 71.9189 58.4452 71.9189 60.0549C71.9189 69.8012 64.0186 77.6993 54.2695 77.6994C50.7277 77.6994 47.4283 76.6487 44.6865 74.8664C41.8097 76.818 38.4133 77.8646 34.9336 77.8644C25.1845 77.8644 17.2844 69.9672 17.2842 60.2209C17.2842 58.6106 17.5167 57.0021 17.9053 55.5412C13.8749 52.3432 11.252 47.3586 11.252 41.799C11.2521 32.3705 18.7102 24.6838 28.0303 24.2463C30.5198 17.4574 37.0235 12.673 44.6016 12.673ZM52.4521 57.4758C52.6087 58.3706 52.666 59.2719 52.666 60.2209C52.6659 64.7897 50.9213 68.8822 48.0537 72.0363C49.9927 73.0575 52.1418 73.6359 54.4346 73.6359C61.8725 73.6359 67.9365 67.5734 67.9365 60.1379C67.9365 59.7006 67.897 59.2591 67.8457 58.7971C67.8093 58.4691 67.7681 58.1267 67.7314 57.7746C65.5548 58.7604 63.0864 59.3615 60.4668 59.3615C57.588 59.3615 54.8492 58.7105 52.4521 57.4758ZM36.9404 57.5471C34.549 58.7893 31.8736 59.4435 28.9844 59.4435C26.3378 59.4435 23.9236 58.8313 21.6719 57.8312C21.4934 58.6621 21.4317 59.4479 21.4316 60.3029C21.4316 67.7368 27.4944 73.8009 34.9346 73.883C37.234 73.8828 39.4576 73.3 41.4023 72.2082C38.5279 69.0497 36.7023 64.8745 36.7021 60.2209C36.7021 59.2704 36.8118 58.3764 36.9404 57.5471ZM44.6094 50.7355C42.3 53.2226 40.8496 56.5287 40.8496 60.1379C40.8496 63.828 42.3764 67.2143 44.7627 69.6281C47.068 67.2196 48.5185 63.9121 48.5186 60.2209C48.5186 56.5332 46.9928 53.149 44.6094 50.7355ZM35.0986 46.7228C29.8706 46.723 25.4172 49.6715 23.1084 53.9787C24.902 54.866 26.9107 55.38 29.0664 55.3801C34.2123 55.3801 38.6637 52.4312 40.9736 48.1232C39.173 47.236 37.0965 46.7228 35.0986 46.7228ZM54.3516 46.6398C52.1937 46.6399 50.183 47.1541 48.3877 48.0432C50.6196 52.4258 55.1505 55.38 60.3838 55.3801C62.4636 55.3801 64.5453 54.8644 66.3467 53.9758C64.1142 49.5935 59.5841 46.6398 54.3516 46.6398ZM27.1602 28.4308C20.6244 29.3245 15.4826 34.9776 15.4824 41.799C15.4824 45.7031 17.0645 49.1538 19.5762 51.6437C22.2065 47.0388 26.8215 43.7276 32.3008 42.9074C29.037 39.6639 27.0343 35.2223 27.0342 30.3176C27.0342 29.6838 27.0932 29.0513 27.1602 28.4308ZM62.124 28.3469C62.1912 28.968 62.251 29.6006 62.251 30.2346C62.2509 35.1371 60.25 39.5779 57.0596 42.7492C62.5343 43.6387 67.1476 46.9439 69.6338 51.4777C72.2195 48.988 73.8036 45.5415 73.8037 41.717C73.8037 34.8922 68.7367 29.2384 62.124 28.3469ZM31.2812 28.5099C31.1832 29.0612 31.1816 29.6722 31.1816 30.3176C31.1819 36.9986 36.0382 42.5043 42.4385 43.6008C42.5079 42.9807 42.5684 42.4195 42.5684 41.799C42.5682 35.1071 37.6969 29.5936 31.2812 28.5099ZM58.0596 28.5139C51.6569 29.6084 46.799 35.1165 46.7988 41.799C46.7988 42.4111 46.857 43.0266 46.9248 43.6008C53.3274 42.5064 58.1863 37.0002 58.1865 30.3176C58.1865 29.7046 58.1273 29.0885 58.0596 28.5139ZM44.6836 16.7365C39.2383 16.7366 34.5642 19.9717 32.4648 24.5607C37.8077 25.6231 42.3008 29.1146 44.6836 33.8459C47.0667 29.1145 51.5603 25.623 56.9033 24.5607C54.8061 19.8984 50.134 16.7365 44.6836 16.7365Z" fill="white" stroke="white" stroke-width="0.594424"/><path d="M103.179 45.2688L105.646 57.9132L117.07 51.9582L108.722 61.7705L120.5 66.9891L107.624 66.5803L110.888 79.0429L103.179 68.7209L95.4702 79.0429L98.7339 66.5803L85.8576 66.9891L97.6361 61.7705L89.2883 51.9582L100.712 57.9132L103.179 45.2688Z" fill="white"/><path d="M124.83 7.7363L129.729 24.4889L146.482 29.3882L129.729 34.2875L124.83 51.0401L119.93 34.2875L103.178 29.3882L119.93 24.4889L124.83 7.7363Z" fill="white"/></svg>
+    </span>and<span class="chip"><!-- Kuyua cyan circle icon -->
+      <svg width="89" height="89" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#66F0FF"/><circle cx="44.3966" cy="44.3973" r="22.5881" fill="#66F0FF" stroke="white" stroke-width="16.6717"/></svg>
+    </span>climate<br>
+    <span class="chip"><!-- Kuyua blue globe icon -->
+      <svg width="93" height="93" viewBox="0 0 93 93" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="92.909" height="92.909" rx="13.0773" fill="#66F0FF"/><path d="M46.4541 13.8672C64.445 13.8675 79.0312 28.4545 79.0312 46.4454C79.031 64.4361 64.4448 79.0223 46.4541 79.0225C28.4632 79.0225 13.8762 64.4362 13.876 46.4454C13.876 28.4543 28.463 13.8672 46.4541 13.8672ZM46.4541 58.462C44.4453 58.462 42.4068 58.5561 40.3828 58.7383C41.0206 65.5671 42.1272 70.6844 43.2705 74.1856C44.3131 74.3022 45.3768 74.3829 46.4541 74.3829C47.5313 74.3829 48.587 74.309 49.6357 74.1856C50.7792 70.6844 51.8929 65.5672 52.5234 58.7383C50.5 58.5561 48.4624 58.462 46.4541 58.462ZM35.5137 59.3409C31.2116 60.0205 27.1157 61.0991 23.6133 62.4825C27.0488 67.3645 32.0082 71.1009 37.793 72.9962C37.7439 72.821 37.6948 72.65 37.6514 72.4639L37.4727 71.7413C36.5992 68.1061 35.9461 63.892 35.5137 59.3409ZM57.3926 59.3409C56.9311 64.1962 56.2117 68.6678 55.2559 72.462C55.2123 72.6487 55.1625 72.8205 55.1133 72.9962C60.8983 71.101 65.8572 67.3645 69.293 62.4825C65.7906 61.0993 61.702 60.0276 57.3926 59.3409ZM71.6689 34.4893C67.6876 36.1924 62.983 37.4912 57.751 38.2628C57.9053 40.9241 57.9941 43.6592 57.9941 46.4454C57.9941 49.231 57.9052 51.9652 57.751 54.626C62.9754 55.3975 67.6875 56.696 71.6689 58.4063C73.3978 54.7759 74.3984 50.7355 74.3984 46.4522C74.3984 42.1684 73.3981 38.1201 71.6689 34.4893ZM21.2451 34.4825C19.5161 38.1204 18.5166 42.1618 18.5166 46.4454C18.5167 50.7286 19.5163 54.7692 21.2451 58.3995C25.2192 56.6964 29.9312 55.3971 35.1631 54.6182C35.0088 51.9574 34.9199 49.2232 34.9199 46.4376C34.9199 43.6516 35.0088 40.9171 35.1631 38.2559C29.9311 37.4916 25.2191 36.1856 21.2451 34.4825ZM52.8652 38.8116C50.7864 38.9794 48.6495 39.0684 46.4541 39.0684C44.2582 39.0684 42.1203 38.9795 40.041 38.8116C39.9166 41.1878 39.8428 43.7254 39.8428 46.4454C39.8428 49.1648 39.9166 51.7015 40.041 54.0772C42.1203 53.9093 44.2582 53.8214 46.4541 53.8214C48.6498 53.8214 50.7871 53.9093 52.8662 54.0772C52.9979 51.7015 53.0718 49.1648 53.0645 46.4454C53.0645 43.7254 52.9897 41.1878 52.8652 38.8116ZM46.4541 18.5079C45.3693 18.5079 44.3127 18.5797 43.2637 18.7032C42.1275 22.2043 41.0144 27.3217 40.3838 34.1505C42.4075 34.3327 44.4456 34.4278 46.4541 34.4278C48.4621 34.4278 50.4993 34.3326 52.5225 34.1505C51.8845 27.3215 50.7791 22.2042 49.6357 18.7032C48.5937 18.5867 47.5309 18.5079 46.4541 18.5079ZM37.793 19.8926C32.0083 21.7878 27.0489 25.5246 23.6133 30.4063C27.1156 31.7896 31.2042 32.8611 35.5137 33.5479C35.9752 28.6926 36.6954 24.221 37.6514 20.4268C37.695 20.2401 37.7437 20.0684 37.793 19.8926ZM55.2568 20.4278H55.2559C56.2191 24.2218 56.9312 28.6931 57.3926 33.5479C61.6947 32.8684 65.7905 31.7897 69.293 30.4063C65.8499 25.5245 60.898 21.7876 55.1133 19.8926C55.1626 20.0687 55.2132 20.2407 55.2568 20.4278Z" fill="white" stroke="white" stroke-width="0.118885"/></svg>
+    </span>risk analysis<span class="chip"><!-- Kuyua purple stock icon -->
+      <svg width="157" height="93" viewBox="0 0 157 93" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="156.935" height="92.909" rx="13.0773" fill="#D04EFB"/><path d="M16.8359 77.5607L47.8714 31.6281L87.6186 70.0022L132.266 15.3482M132.266 15.3482L101.533 20.8112M132.266 15.3482V47.1273" stroke="white" stroke-width="10.6996" stroke-linecap="round"/></svg>
+    </span>
+  </h1>
+  <p class="hero-sub">
+    Identify risk exposure and <span class="chip-eur">€</span> Value at Risk
+  </p>
 
-      <!-- Giant logo — identical paths to nav logo, fill applied on <g> -->
-      <div class="giant-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108.09 60.03"><g fill="white"><path d="M178.01,22.27c0-12.97-9.06-21.38-22.29-21.38h-45.76v58.23h14.98v-15.56h30.78c13.23,0,22.29-8.32,22.29-21.3ZM151.56,31.01h-26.62V13.46h26.62c4.49,0,11.48,0,11.48,8.81s-6.99,8.74-11.48,8.74Z"/><path d="M199.93.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L220.14.89h-20.21ZM198.18,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><path d="M283.49,12.62c15.8,0,19.8,6.57,20.63,10.98h15.23C318.43,9.13,306.78.06,283.49.06s-37.11,10.65-37.11,29.95,13.15,29.95,34.61,29.95c12.4,0,21.13-4,26.62-9.98l.67,9.15h11.06v-31.19h-36.94v9.73h21.71c-.33,4.41-6.15,10.74-20.63,10.74-19.39,0-22.13-10.98-22.13-18.05s2.66-17.72,22.13-17.72Z"/><polygon points="394.53 23.69 347.12 23.69 347.12 .89 332.14 .89 332.14 59.12 347.12 59.12 347.12 36.33 394.53 36.33 394.53 59.12 409.51 59.12 409.51 .89 394.53 .89 394.53 23.69"/><polygon points="418.98 59.12 480.54 59.12 480.54 47.23 433.96 47.23 433.96 35.42 480.54 35.42 480.54 24.6 433.96 24.6 433.96 12.79 480.54 12.79 480.54 .89 418.98 .89 418.98 59.12"/><polygon points="537.22 .89 484.65 .89 484.65 13.46 512.94 13.46 512.94 59.12 527.91 59.12 527.91 13.46 537.22 13.46 556.19 13.46 565.51 13.46 565.51 59.12 580.49 59.12 580.49 13.46 608.77 13.46 608.77 .89 556.19 .89 537.22 .89"/><rect x="613.72" y=".89" width="14.98" height="58.23"/><polygon points="635.35 59.12 650.33 59.12 650.33 40.9 691.92 40.9 691.92 28.26 650.33 28.26 650.33 13.46 696.91 13.46 696.91 .89 635.35 .89 635.35 59.12"/><rect x="701.86" y=".89" width="14.98" height="58.23"/><path d="M779.56,34.17c-1.41,9.48-8.73,13.22-21.13,13.22-15.14,0-21.63-5.49-21.63-17.47s6.41-17.3,21.63-17.3c12.48,0,19.72,3.66,21.13,13.06h15.23c-1.5-16.81-13.14-25.62-36.35-25.62-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03c23.21,0,34.86-8.9,36.35-25.79h-15.23Z"/><path d="M820.45.89l-30.03,58.23h16.47l6.24-12.4h34.86l6.24,12.4h16.55L840.67.89h-20.21ZM818.71,35.58l11.89-23.62,11.81,23.62h-23.71Z"/><polygon points="857.92 13.46 886.21 13.46 886.21 59.12 901.18 59.12 901.18 13.46 929.46 13.46 929.46 .89 857.92 .89 857.92 13.46"/><rect x="934.41" y=".89" width="14.98" height="58.23"/><path d="M990.99.06c-25.62,0-36.6,10.57-36.6,29.86s10.98,30.03,36.6,30.03,36.6-10.73,36.6-30.03S1016.53.06,990.99.06ZM990.99,47.39c-15.56,0-21.63-5.49-21.63-17.47s5.99-17.3,21.63-17.3,21.63,5.49,21.63,17.3-6.07,17.47-21.63,17.47Z"/><polygon points="1093.11 .89 1093.11 44.65 1053.35 .89 1033.05 .89 1033.05 59.12 1048.03 59.12 1048.03 15.45 1087.71 59.12 1108.09 59.12 1108.09 .89 1093.11 .89"/><path d="M99.89,38.06c-2.15-1.34-6.5-1.76-12.46-1.93,0,0,.38,2.48-.03,6.02-.38,3.3-4.48,4.61-6.37,4.94-5.86,1.01-12.28,1.51-20.24,1-7.96-.51-14.47-1.57-16.68-4.2-1.98-2.35-1.64-4.77-1.64-4.77h-14.98s-.61,10.04,6.96,14.92c7.57,4.87,16.98,5.42,25.97,5.9s22.59-.66,27.64-2.2c2.25-.69,4.85-1.64,7.39-3.38,2.53-1.74,4.41-4.26,5.15-6.34.93-2.6,2.35-8.03-.71-9.94Z"/><path d="M32.04,23.77c2.13,1.34,5.74,1.11,11.38.88,0,0-.35-3.77.34-6.53.74-2.97,2.16-4.84,5.69-5.36,5.85-.87,9.83-.96,17.24-.75,7.4.21,13.08,1.02,15.68,3.27,2.15,1.86,1.9,4.69,1.9,4.69h14.98s.68-9.05-7.27-14.18C85.43,1.54,75.43.43,66.43.05c-6.77-.29-18.62.54-25.7,2.82-5.16,1.66-8.34,4.12-10.14,7.76-.82,1.65-1.64,3.87-1.41,8.01.11,2.06.93,3.9,2.87,5.12Z"/><path d="M72.13,24.66l-28.12.02-.59-.04s-.01.09-.01.1c-.12,1.03-.97,11.86,15.17,11.36l28.26-.02.59.04s0-.09.01-.1c.12-1.03.83-11.86-15.32-11.37Z"/><path d="M13.05,16.35h0s0,0,0,0C11.78,22.44,6.11,28.12,0,29.38h0c6.1,1.27,11.77,6.95,13.03,13.05h0c1.26-6.1,6.94-11.77,13.05-13.03h0c-6.1-1.26-11.78-6.94-13.04-13.04Z"/></g></svg>
+  <!-- Hero product placeholder -->
+  <div class="hero-placeholder-wrap">
+    <div class="hero-placeholder"></div>
+  </div>
+</section>
+
+<!-- ════════════════════ LOGOS ════════════════════ -->
+<div class="logos-bar">
+  <span class="logo-item">Metro</span>
+  <span class="logo-item">Jungheinrich</span>
+  <span class="logo-item">Audi</span>
+  <span class="logo-item">Allianz</span>
+  <span class="logo-item">Siemens</span>
+  <span class="logo-item">SFDR</span>
+</div>
+
+<!-- ════════════════════ HOW DOES IT WORK ════════════════════ -->
+<section class="how-section">
+  <h2>How does<br>it work?</h2>
+
+  <div class="steps-list">
+
+    <!-- Step 1 -->
+    <div class="step-row">
+      <div class="step-content">
+        <div class="step-badge bg-green"><span class="badge-dot"></span>Step One</div>
+        <div class="step-icon-box" style="background:#DCFCE7">📍</div>
+        <h3 class="step-title">Map Your Location</h3>
+        <p class="step-desc">Upload your asset locations and instantly see them plotted on our global risk intelligence map. Connect addresses, GPS coordinates, or portfolio data in seconds — no GIS expertise required.</p>
       </div>
-
-      <!-- Scrolling strip: right → left, seamless loop -->
-      <!-- Cards are duplicated (×2) so the animation loops without a gap -->
-      <div class="scroll-strip">
-        <div class="scroll-track" id="scrollTrack">
-
-          <!-- Set 1 — order: 1,4,8,9,5,2,7,3,6,10 -->
-          <div class="s-card" style="background:url('project1.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project4.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></div>
-          <div class="s-card" style="background:url('project9.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project5.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
-          <div class="s-card" style="background:url('project7.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project3.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project6.jpg') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project10.png') center/cover no-repeat;"></div>
-
-          <!-- Set 2 (exact duplicate — makes the loop seamless) -->
-          <div class="s-card" style="background:url('project1.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project4.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project8.mp4" type="video/mp4"></video></div>
-          <div class="s-card" style="background:url('project9.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project5.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="position:relative;overflow:hidden;"><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="project2.mp4" type="video/mp4"></video></div>
-          <div class="s-card" style="background:url('project7.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project3.png') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project6.jpg') center/cover no-repeat;"></div>
-          <div class="s-card" style="background:url('project10.png') center/cover no-repeat;"></div>
-
-        </div>
-      </div>
-
-    </div><!-- /hero-middle -->
-
-    <!-- Bottom labels — spread across the hero footer -->
-    <div class="hero-labels">
-      <span class="hero-label">Berlin based<br>design studio since 2026</span>
-      <span class="hero-label">Brand &amp;<br>Visual Identity</span>
-      <span class="hero-label">Web Design &amp;<br>Development</span>
-      <span class="hero-label">UI/UX<br>Design</span>
+      <div><div class="step-placeholder"></div></div>
     </div>
 
-  </section>
-
-  <!-- ══════════════════════════════════
-       CLAIM STATEMENT
-  ══════════════════════════════════ -->
-  <section class="claim-section">
-    <p class="claim-text">Spaghettification is a Design and Development Studio based in Berlin with a thing for Digital Startups and Fintech Companies.</p>
-  </section>
-
-  <!-- ══════════════════════════════════
-       WORKS
-  ══════════════════════════════════ -->
-  <section id="works" class="section">
-    <div class="section-header reveal">
-      <span class="section-tag">01 — Selected Works</span>
-      <h2 class="section-title">Works</h2>
+    <!-- Step 2 -->
+    <div class="step-row rev">
+      <div class="step-content">
+        <div class="step-badge bg-orange"><span class="badge-dot"></span>Step Two</div>
+        <div class="step-icon-box" style="background:#FEF3C7">📊</div>
+        <h3 class="step-title">Analyze Environmental Risks</h3>
+        <p class="step-desc">Get a comprehensive risk assessment for each asset, covering physical climate hazards (flood, drought, heat, wildfire), nature dependencies, and regulatory exposure — powered by IPCC and TNFD science.</p>
+      </div>
+      <div><div class="step-placeholder"></div></div>
     </div>
 
-    <div class="works-grid">
-
-      <!-- CARD 1 — TO ADD YOUR IMAGE: change style to: background: url('images/project1.jpg') center/cover no-repeat -->
-      <article class="work-card reveal reveal-d1">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#1a1a2e,#16213e);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Brand — 2025</span>
-        </div>
-      </article>
-
-      <article class="work-card reveal reveal-d2">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#1a0505,#e63946);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Web — 2025</span>
-        </div>
-      </article>
-
-      <article class="work-card reveal reveal-d3">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#051220,#0f3460);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">UI/UX — 2025</span>
-        </div>
-      </article>
-
-      <article class="work-card reveal reveal-d4">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#051a10,#00b894);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Brand — 2026</span>
-        </div>
-      </article>
-
-      <article class="work-card reveal reveal-d5">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#120512,#a29bfe);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">UI/UX — 2026</span>
-        </div>
-      </article>
-
-      <article class="work-card reveal reveal-d6">
-        <div class="work-thumb" style="background:linear-gradient(145deg,#1a1200,#fdcb6e);"></div>
-        <div class="work-divider">
-          <span class="work-title">Project Name</span>
-          <span class="work-cat">Web — 2026</span>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════
-       SERVICES
-  ══════════════════════════════════ -->
-  <section id="services" class="section">
-    <div class="section-header reveal">
-      <span class="section-tag">02 — What We Do</span>
-      <h2 class="section-title">Services</h2>
+    <!-- Step 3 -->
+    <div class="step-row">
+      <div class="step-content">
+        <div class="step-badge bg-green"><span class="badge-dot"></span>Step Three</div>
+        <div class="step-icon-box" style="background:#DCFCE7">💰</div>
+        <h3 class="step-title">Translate Risks Into Financial Impact</h3>
+        <p class="step-desc">Convert environmental scores into monetary terms. Understand Value at Risk (VaR), stranded asset exposure, and potential write-downs — aligned with TCFD, TNFD, and CSRD reporting requirements.</p>
+      </div>
+      <div><div class="step-placeholder"></div></div>
     </div>
 
-    <div class="services-list">
-      <div class="service-item reveal">
-        <span class="service-num">01</span>
-        <h3 class="service-name">Brand &amp;<br>Visual Identity</h3>
-        <p class="service-desc">From zero to a brand that commands the room. We build visual systems that are precise, distinctive, and built to scale — logos, color, typography, motion, the whole stack.</p>
+    <!-- Step 4 -->
+    <div class="step-row rev">
+      <div class="step-content">
+        <div class="step-badge bg-purple"><span class="badge-dot"></span>Step Four</div>
+        <div class="step-icon-box" style="background:#F3E8FF">🔍</div>
+        <h3 class="step-title">Risk Evolution Foresight and Monitoring</h3>
+        <p class="step-desc">Track how risks evolve across climate scenarios (1.5°C, 2°C, 4°C). Receive alerts when new hazards emerge and monitor your portfolio's risk trajectory in real time with automated updates.</p>
       </div>
-      <div class="service-item reveal reveal-d1">
-        <span class="service-num">02</span>
-        <h3 class="service-name">Web Design &amp;<br>Development</h3>
-        <p class="service-desc">Websites that move and convert. We design and code digital experiences from concept to deployment — fast, accessible, and obsessively detailed.</p>
-      </div>
-      <div class="service-item reveal reveal-d2">
-        <span class="service-num">03</span>
-        <h3 class="service-name">UI/UX<br>Design</h3>
-        <p class="service-desc">Products that make sense and feel good. User research, wireframes, prototypes, design systems — we build interfaces where beauty and usability are the same thing.</p>
-      </div>
-      <div class="service-item reveal reveal-d3">
-        <span class="service-num">04</span>
-        <h3 class="service-name">Social Media<br>Management</h3>
-        <p class="service-desc">Presence that performs. We craft and manage content strategies that are visually coherent, editorially sharp, and built around your brand — not the algorithm.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════
-       ABOUT
-  ══════════════════════════════════ -->
-  <section id="about" class="section">
-    <div class="section-header reveal">
-      <span class="section-tag">03 — Who We Are</span>
-      <h2 class="section-title">About</h2>
+      <div><div class="step-placeholder"></div></div>
     </div>
 
-    <div class="about-grid">
-      <div>
-        <h2 class="about-statement reveal">Design is the difference between being seen and being remembered.</h2>
-        <p class="about-body reveal reveal-d1">Spaghettification is the studio of Laura Angeli, Creative Director and founder. Built in Berlin in 2026 with one conviction: that great design is never decoration — it's infrastructure. We work with digital startups and fintech companies, and bring in the right collaborators for the right projects — keeping the team lean, the thinking sharp, and the work uncompromising.</p>
+    <!-- Step 5 -->
+    <div class="step-row">
+      <div class="step-content">
+        <div class="step-badge bg-red"><span class="badge-dot"></span>Step Five</div>
+        <div class="step-icon-box" style="background:#FEE2E2">📋</div>
+        <h3 class="step-title">Act and Report With Confidence</h3>
+        <p class="step-desc">Generate audit-ready reports aligned with CSRD, TCFD, TNFD, and EU Taxonomy. Export boardroom-ready decks and regulatory filings with a single click — and turn risk insight into strategic action.</p>
       </div>
+      <div><div class="step-placeholder"></div></div>
+    </div>
 
-      <!-- Selected clients -->
-      <div class="about-clients reveal reveal-d2">
-        <p class="about-clients-title">Selected Clients</p>
-        <div class="client-row"><span class="client-name">Warner Music</span><span class="client-city">Mexico City</span></div>
-        <div class="client-row"><span class="client-name">Warsteiner</span><span class="client-city">Berlin</span></div>
-        <div class="client-row"><span class="client-name">Food Spring</span><span class="client-city">Berlin</span></div>
-        <div class="client-row"><span class="client-name">Biotikur</span><span class="client-city">Berlin</span></div>
-        <div class="client-row"><span class="client-name">EasyPZ</span><span class="client-city">New York</span></div>
-        <div class="client-row"><span class="client-name">Napoleon Komplex</span><span class="client-city">Berlin</span></div>
-        <div class="client-row"><span class="client-name">Biblioteca Ostinata</span><span class="client-city">Milano</span></div>
-        <div class="client-row"><span class="client-name">Incandescent</span><span class="client-city">New York</span></div>
-        <div class="client-row"><span class="client-name">Kuyua</span><span class="client-city">Hamburg</span></div>
-        <div class="client-row"><span class="client-name">Flightpal</span><span class="client-city">Dubai</span></div>
+  </div>
+</section>
+
+<!-- ════════════════════ FEATURES SPLIT ════════════════════ -->
+<section>
+  <div class="features-split">
+
+    <div class="feat-card climate">
+      <div class="feat-label">Climate Analysis</div>
+      <h3 class="feat-title">Climate Risks Analysis</h3>
+      <p class="feat-desc">Assess exposure to physical climate hazards — floods, droughts, extreme heat, wildfires — across your entire asset base. Quantify transition risks as regulations tighten globally.</p>
+      <div class="feat-placeholder"></div>
+    </div>
+
+    <div class="feat-card nature">
+      <div class="feat-label">Nature Analysis</div>
+      <h3 class="feat-title">Biodiversity & Nature Risk Analysis</h3>
+      <p class="feat-desc">Understand your dependencies and impacts on nature. Identify critical ecosystem services and assess biodiversity risk aligned with TNFD LEAP and GRI frameworks.</p>
+      <div class="feat-placeholder"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════ CTA ════════════════════ -->
+<section class="cta-section">
+  <h2>Want to see a preview?</h2>
+  <p>Enter your details and we'll set up your personalized demo.</p>
+  <form class="cta-form" onsubmit="return false;">
+    <input type="text" placeholder="Full name" />
+    <input type="email" placeholder="Work email" />
+    <input type="text" placeholder="Company name" />
+    <button type="submit">Request access →</button>
+  </form>
+</section>
+
+<!-- ════════════════════ COMPLIANCE ════════════════════ -->
+<div class="compliance-bar">
+  <div class="comp-item"><div class="comp-icon">🌿</div>TNFD</div>
+  <div class="comp-item"><div class="comp-icon">📊</div>TCFD</div>
+  <div class="comp-item"><div class="comp-icon">🇪🇺</div>CSRD</div>
+  <div class="comp-item"><div class="comp-icon">♻️</div>EU Taxonomy</div>
+  <div class="comp-item"><div class="comp-icon">🎯</div>SFDR</div>
+  <div class="comp-item"><div class="comp-icon">🌐</div>GRI</div>
+  <div class="comp-item"><div class="comp-icon">📋</div>ESRS</div>
+</div>
+
+<!-- ════════════════════ NEWSROOM ════════════════════ -->
+<section class="newsroom">
+  <div class="newsroom-header">Kuyua Newsroom</div>
+  <div class="news-grid">
+
+    <div class="news-card">
+      <div class="news-thumb"></div>
+      <div class="news-body">
+        <div class="news-cat">Biodiversity</div>
+        <div class="news-title">Kuyua joins the TNFD Forum as a Data Provider</div>
+        <p class="news-desc">We're proud to support global nature disclosure standards alongside leading financial institutions worldwide.</p>
       </div>
     </div>
-  </section>
 
-  <!-- ══════════════════════════════════
-       CONTACT
-  ══════════════════════════════════ -->
-  <section id="contact">
-    <p class="contact-eyebrow reveal">— Get in touch</p>
-    <h2 class="contact-cta reveal reveal-d1">Let's<br>Work<br>Together.</h2>
-    <!-- Replace with your actual email address -->
-    <a href="mailto:hello@spaghettification.studio" class="contact-email reveal reveal-d2">
-      hello@spaghettification.studio
-    </a>
-  </section>
-
-  <!-- ══════════════════════════════════
-       FOOTER
-  ══════════════════════════════════ -->
-  <footer>
-    <span>© 2026 Spaghettification</span>
-    <div class="footer-links">
-      <a href="#">Instagram</a>
-      <a href="#">LinkedIn</a>
-      <a href="#">Behance</a>
+    <div class="news-card">
+      <div class="news-thumb"></div>
+      <div class="news-body">
+        <div class="news-cat">Climate</div>
+        <div class="news-title">Understanding Biodiversity and Climate Interdependencies</div>
+        <p class="news-desc">How nature loss and climate change are interconnected risks that demand integrated financial analysis.</p>
+      </div>
     </div>
-    <span>Berlin, DE</span>
-  </footer>
 
-  <!-- ══════════════════════════════════
-       SCRIPTS
-  ══════════════════════════════════ -->
-  <script>
-    /* ── Scroll reveal ── */
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08 });
+    <div class="news-card">
+      <div class="news-thumb"></div>
+      <div class="news-body">
+        <div class="news-cat">Regulation</div>
+        <div class="news-title">CSRD Is Here — How Kuyua Helps You Comply</div>
+        <p class="news-desc">A complete guide to using Kuyua for CSRD double materiality assessments and audit-ready reporting.</p>
+      </div>
+    </div>
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </div>
+</section>
 
-    /* ── Mobile menu ── */
-    const burger     = document.getElementById('burger');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    burger.addEventListener('click', () => {
-      burger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-    });
-
-    function closeMobile() {
-      burger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    // ── LOGO SWITCHER: icon ↔ wordmark based on hero logo visibility ──
-    (function() {
-      const heroLogo = document.querySelector('.giant-logo');
-      const navLogo  = document.querySelector('.nav-logo');
-      if (!heroLogo || !navLogo) return;
-      const logoObserver = new IntersectionObserver(function(entries) {
-        // When the giant hero logo leaves the viewport, show the full wordmark
-        navLogo.classList.toggle('hero-passed', !entries[0].isIntersecting);
-      }, { threshold: 0 });
-      logoObserver.observe(heroLogo);
-    })();
-  </script>
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <div class="footer-wordmark">Kuyua</div>
+  <div class="footer-cols">
+    <div class="footer-col">
+      <div class="footer-col-title">Product</div>
+      <a href="#">Platform</a>
+      <a href="#">Climate Risks</a>
+      <a href="#">Nature & Biodiversity</a>
+      <a href="#">Reporting</a>
+      <a href="#">Integrations</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">About us</div>
+      <a href="#">Our Mission</a>
+      <a href="#">Team</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+      <a href="#">Blog</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Resources</div>
+      <a href="#">Documentation</a>
+      <a href="#">Case Studies</a>
+      <a href="#">Webinars</a>
+      <a href="#">API</a>
+      <a href="#">Status</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Contact us</div>
+      <a href="#">Book a Demo</a>
+      <a href="#">Support</a>
+      <a href="#">hello@kuyua.com</a>
+      <a href="#" style="margin-top:8px; display:block;">LinkedIn ↗</a>
+      <a href="#">Book a demo</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Kuyua GmbH. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Imprint</a>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
