@@ -153,7 +153,14 @@
     .hero-placeholder {
       background: #F3F4F6;
       border-radius: 20px;
-      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.10);
+    }
+
+    .hero-placeholder img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
     /* ─── LOGOS ──────────────────────────────────────────── */
@@ -733,7 +740,9 @@
 
   <!-- Hero product placeholder -->
   <div class="hero-placeholder-wrap">
-    <div class="hero-placeholder"></div>
+    <div class="hero-placeholder">
+      <img src="hero-screenshot.jpg" alt="Kuyua dashboard showing nature and climate risk valuation for a REWE Center location in Valencia, Spain">
+    </div>
   </div>
 </section>
 
