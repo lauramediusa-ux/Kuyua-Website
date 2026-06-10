@@ -529,6 +529,159 @@
     .footer-bottom-links { display: flex; gap: 24px; }
     .footer-bottom-links a { color: #555; transition: color 0.2s; }
     .footer-bottom-links a:hover { color: #fff; }
+
+    /* ─── ANIMATIONS ──────────────────────────────────── */
+
+    @keyframes kuyua-fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes kuyua-navIn {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes kuyua-float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-7px); }
+    }
+
+    .navbar {
+      animation: kuyua-navIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transition: box-shadow 0.3s ease;
+    }
+    .navbar.scrolled {
+      box-shadow: 0 2px 24px rgba(0,0,0,0.09);
+    }
+
+    .hero-sub {
+      animation: kuyua-fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: 1.5s;
+    }
+    .hero-placeholder-wrap {
+      animation: kuyua-fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: 1.7s;
+    }
+
+    /* ─── HERO HEADLINE REVEAL ──────────────────────── */
+    /* Each word rises out of a clipping mask; each icon chip fades + scales in.
+       Staggered left-to-right so the whole statement assembles itself. */
+    .reveal-mask {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+    }
+    .reveal-text {
+      display: inline-block;
+      transform: translateY(115%);
+      animation: reveal-text-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes reveal-text-up {
+      to { transform: translateY(0%); }
+    }
+    .reveal-chip {
+      opacity: 0;
+      transform: translateY(30%) scale(0.8);
+      animation: reveal-chip-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes reveal-chip-in {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .chip { animation: none; } /* bouncing removed — chips use custom animations */
+
+    .anim-fade {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .anim-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .anim-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .anim-fade.is-visible,
+    .anim-left.is-visible,
+    .anim-right.is-visible {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    /* ─── NATURE CHIP ───────────────────────────────── */
+    /*
+      Layout trick: the chip keeps its full natural width in the DOM so
+      surrounding text never reflows. clip-path crops it to a square
+      visually, then expands to a rectangle. No layout jank.
+    */
+    /* .chip-nature — rectangle stays full size; only internal elements animate */
+    .chip-nature { /* no chip-level animation needed */ }
+
+    /* Seed circle — visible while chip is square, fades as flower blooms */
+    .nature-seed {
+      transform-origin: 44.6px 45.3px;
+      animation: nature-seed-fade 4s ease-in-out infinite;
+    }
+    @keyframes nature-seed-fade {
+      0%,  10% { opacity: 1; transform: scale(1); }
+      30%, 70% { opacity: 0; transform: scale(0.3); }
+      90%,100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Flower path — blooms from a tiny dot to full shape */
+    .nature-flower {
+      transform-origin: 44.6px 45.3px;
+      animation: nature-flower-bloom 4s ease-in-out infinite;
+    }
+    @keyframes nature-flower-bloom {
+      0%,  16% { opacity: 0; transform: scale(0.08); }
+      40%, 65% { opacity: 1; transform: scale(1);    }
+      86%,100% { opacity: 0; transform: scale(0.08); }
+    }
+
+    /* Sparkles — pop in once the rectangle is fully open */
+    .nature-spark1 {
+      transform-origin: 103px 62px;
+      animation: nature-spark-pop 4s ease-in-out infinite;
+    }
+    .nature-spark2 {
+      transform-origin: 125px 29px;
+      animation: nature-spark-pop 4s ease-in-out infinite;
+      animation-delay: 0.18s;
+    }
+    @keyframes nature-spark-pop {
+      0%,  37% { opacity: 0; transform: scale(0.1) rotate(-20deg); }
+      53%, 63% { opacity: 1; transform: scale(1)   rotate(0deg);   }
+      80%,100% { opacity: 0; transform: scale(0.1) rotate(20deg);  }
+    }
+
+    /* ─── REDUCED MOTION / NO-ANIMATION FALLBACK ─────── */
+    /* Ensures every entrance-animated element ends up visible even if
+       animations are disabled (OS reduced-motion setting, or a static
+       preview that doesn't run CSS animations). */
+    @media (prefers-reduced-motion: reduce) {
+      .navbar,
+      .hero-sub,
+      .hero-placeholder-wrap,
+      .reveal-text,
+      .reveal-chip,
+      .anim-fade,
+      .anim-left,
+      .anim-right,
+      .nature-seed,
+      .nature-flower,
+      .nature-spark1,
+      .nature-spark2 {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -565,14 +718,14 @@
 <!-- ════════════════════ HERO ════════════════════ -->
 <section class="hero">
   <h1 class="hero-headline">
-    Nature<span class="chip"><!-- Kuyua green nature icon -->
-      <svg width="153" height="91" viewBox="0 0 153 91" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="152.93" height="90.5376" rx="13.0773" fill="#45F974"/><path d="M44.6016 12.673C52.1806 12.6731 58.6813 17.5395 61.1709 24.2463C70.4917 24.6827 77.951 32.3696 77.9512 41.799C77.9512 47.354 75.4113 52.341 71.2979 55.4631C71.6853 56.9145 71.9189 58.4452 71.9189 60.0549C71.9189 69.8012 64.0186 77.6993 54.2695 77.6994C50.7277 77.6994 47.4283 76.6487 44.6865 74.8664C41.8097 76.818 38.4133 77.8646 34.9336 77.8644C25.1845 77.8644 17.2844 69.9672 17.2842 60.2209C17.2842 58.6106 17.5167 57.0021 17.9053 55.5412C13.8749 52.3432 11.252 47.3586 11.252 41.799C11.2521 32.3705 18.7102 24.6838 28.0303 24.2463C30.5198 17.4574 37.0235 12.673 44.6016 12.673ZM52.4521 57.4758C52.6087 58.3706 52.666 59.2719 52.666 60.2209C52.6659 64.7897 50.9213 68.8822 48.0537 72.0363C49.9927 73.0575 52.1418 73.6359 54.4346 73.6359C61.8725 73.6359 67.9365 67.5734 67.9365 60.1379C67.9365 59.7006 67.897 59.2591 67.8457 58.7971C67.8093 58.4691 67.7681 58.1267 67.7314 57.7746C65.5548 58.7604 63.0864 59.3615 60.4668 59.3615C57.588 59.3615 54.8492 58.7105 52.4521 57.4758ZM36.9404 57.5471C34.549 58.7893 31.8736 59.4435 28.9844 59.4435C26.3378 59.4435 23.9236 58.8313 21.6719 57.8312C21.4934 58.6621 21.4317 59.4479 21.4316 60.3029C21.4316 67.7368 27.4944 73.8009 34.9346 73.883C37.234 73.8828 39.4576 73.3 41.4023 72.2082C38.5279 69.0497 36.7023 64.8745 36.7021 60.2209C36.7021 59.2704 36.8118 58.3764 36.9404 57.5471ZM44.6094 50.7355C42.3 53.2226 40.8496 56.5287 40.8496 60.1379C40.8496 63.828 42.3764 67.2143 44.7627 69.6281C47.068 67.2196 48.5185 63.9121 48.5186 60.2209C48.5186 56.5332 46.9928 53.149 44.6094 50.7355ZM35.0986 46.7228C29.8706 46.723 25.4172 49.6715 23.1084 53.9787C24.902 54.866 26.9107 55.38 29.0664 55.3801C34.2123 55.3801 38.6637 52.4312 40.9736 48.1232C39.173 47.236 37.0965 46.7228 35.0986 46.7228ZM54.3516 46.6398C52.1937 46.6399 50.183 47.1541 48.3877 48.0432C50.6196 52.4258 55.1505 55.38 60.3838 55.3801C62.4636 55.3801 64.5453 54.8644 66.3467 53.9758C64.1142 49.5935 59.5841 46.6398 54.3516 46.6398ZM27.1602 28.4308C20.6244 29.3245 15.4826 34.9776 15.4824 41.799C15.4824 45.7031 17.0645 49.1538 19.5762 51.6437C22.2065 47.0388 26.8215 43.7276 32.3008 42.9074C29.037 39.6639 27.0343 35.2223 27.0342 30.3176C27.0342 29.6838 27.0932 29.0513 27.1602 28.4308ZM62.124 28.3469C62.1912 28.968 62.251 29.6006 62.251 30.2346C62.2509 35.1371 60.25 39.5779 57.0596 42.7492C62.5343 43.6387 67.1476 46.9439 69.6338 51.4777C72.2195 48.988 73.8036 45.5415 73.8037 41.717C73.8037 34.8922 68.7367 29.2384 62.124 28.3469ZM31.2812 28.5099C31.1832 29.0612 31.1816 29.6722 31.1816 30.3176C31.1819 36.9986 36.0382 42.5043 42.4385 43.6008C42.5079 42.9807 42.5684 42.4195 42.5684 41.799C42.5682 35.1071 37.6969 29.5936 31.2812 28.5099ZM58.0596 28.5139C51.6569 29.6084 46.799 35.1165 46.7988 41.799C46.7988 42.4111 46.857 43.0266 46.9248 43.6008C53.3274 42.5064 58.1863 37.0002 58.1865 30.3176C58.1865 29.7046 58.1273 29.0885 58.0596 28.5139ZM44.6836 16.7365C39.2383 16.7366 34.5642 19.9717 32.4648 24.5607C37.8077 25.6231 42.3008 29.1146 44.6836 33.8459C47.0667 29.1145 51.5603 25.623 56.9033 24.5607C54.8061 19.8984 50.134 16.7365 44.6836 16.7365Z" fill="white" stroke="white" stroke-width="0.594424"/><path d="M103.179 45.2688L105.646 57.9132L117.07 51.9582L108.722 61.7705L120.5 66.9891L107.624 66.5803L110.888 79.0429L103.179 68.7209L95.4702 79.0429L98.7339 66.5803L85.8576 66.9891L97.6361 61.7705L89.2883 51.9582L100.712 57.9132L103.179 45.2688Z" fill="white"/><path d="M124.83 7.7363L129.729 24.4889L146.482 29.3882L129.729 34.2875L124.83 51.0401L119.93 34.2875L103.178 29.3882L119.93 24.4889L124.83 7.7363Z" fill="white"/></svg>
-    </span>and<span class="chip"><!-- Kuyua cyan circle icon -->
+    <span class="reveal-mask"><span class="reveal-text" style="animation-delay:0s">Nature</span></span><span class="chip chip-nature reveal-chip" style="animation-delay:0.08s"><!-- Kuyua green nature icon -->
+      <svg width="153" height="91" viewBox="0 0 153 91" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid meet"><rect width="152.93" height="90.5376" rx="13.0773" fill="#45F974"/><circle class="nature-seed" cx="44.6" cy="45.3" r="11" fill="white"/><path class="nature-flower" d="M44.6016 12.673C52.1806 12.6731 58.6813 17.5395 61.1709 24.2463C70.4917 24.6827 77.951 32.3696 77.9512 41.799C77.9512 47.354 75.4113 52.341 71.2979 55.4631C71.6853 56.9145 71.9189 58.4452 71.9189 60.0549C71.9189 69.8012 64.0186 77.6993 54.2695 77.6994C50.7277 77.6994 47.4283 76.6487 44.6865 74.8664C41.8097 76.818 38.4133 77.8646 34.9336 77.8644C25.1845 77.8644 17.2844 69.9672 17.2842 60.2209C17.2842 58.6106 17.5167 57.0021 17.9053 55.5412C13.8749 52.3432 11.252 47.3586 11.252 41.799C11.2521 32.3705 18.7102 24.6838 28.0303 24.2463C30.5198 17.4574 37.0235 12.673 44.6016 12.673ZM52.4521 57.4758C52.6087 58.3706 52.666 59.2719 52.666 60.2209C52.6659 64.7897 50.9213 68.8822 48.0537 72.0363C49.9927 73.0575 52.1418 73.6359 54.4346 73.6359C61.8725 73.6359 67.9365 67.5734 67.9365 60.1379C67.9365 59.7006 67.897 59.2591 67.8457 58.7971C67.8093 58.4691 67.7681 58.1267 67.7314 57.7746C65.5548 58.7604 63.0864 59.3615 60.4668 59.3615C57.588 59.3615 54.8492 58.7105 52.4521 57.4758ZM36.9404 57.5471C34.549 58.7893 31.8736 59.4435 28.9844 59.4435C26.3378 59.4435 23.9236 58.8313 21.6719 57.8312C21.4934 58.6621 21.4317 59.4479 21.4316 60.3029C21.4316 67.7368 27.4944 73.8009 34.9346 73.883C37.234 73.8828 39.4576 73.3 41.4023 72.2082C38.5279 69.0497 36.7023 64.8745 36.7021 60.2209C36.7021 59.2704 36.8118 58.3764 36.9404 57.5471ZM44.6094 50.7355C42.3 53.2226 40.8496 56.5287 40.8496 60.1379C40.8496 63.828 42.3764 67.2143 44.7627 69.6281C47.068 67.2196 48.5185 63.9121 48.5186 60.2209C48.5186 56.5332 46.9928 53.149 44.6094 50.7355ZM35.0986 46.7228C29.8706 46.723 25.4172 49.6715 23.1084 53.9787C24.902 54.866 26.9107 55.38 29.0664 55.3801C34.2123 55.3801 38.6637 52.4312 40.9736 48.1232C39.173 47.236 37.0965 46.7228 35.0986 46.7228ZM54.3516 46.6398C52.1937 46.6399 50.183 47.1541 48.3877 48.0432C50.6196 52.4258 55.1505 55.38 60.3838 55.3801C62.4636 55.3801 64.5453 54.8644 66.3467 53.9758C64.1142 49.5935 59.5841 46.6398 54.3516 46.6398ZM27.1602 28.4308C20.6244 29.3245 15.4826 34.9776 15.4824 41.799C15.4824 45.7031 17.0645 49.1538 19.5762 51.6437C22.2065 47.0388 26.8215 43.7276 32.3008 42.9074C29.037 39.6639 27.0343 35.2223 27.0342 30.3176C27.0342 29.6838 27.0932 29.0513 27.1602 28.4308ZM62.124 28.3469C62.1912 28.968 62.251 29.6006 62.251 30.2346C62.2509 35.1371 60.25 39.5779 57.0596 42.7492C62.5343 43.6387 67.1476 46.9439 69.6338 51.4777C72.2195 48.988 73.8036 45.5415 73.8037 41.717C73.8037 34.8922 68.7367 29.2384 62.124 28.3469ZM31.2812 28.5099C31.1832 29.0612 31.1816 29.6722 31.1816 30.3176C31.1819 36.9986 36.0382 42.5043 42.4385 43.6008C42.5079 42.9807 42.5684 42.4195 42.5684 41.799C42.5682 35.1071 37.6969 29.5936 31.2812 28.5099ZM58.0596 28.5139C51.6569 29.6084 46.799 35.1165 46.7988 41.799C46.7988 42.4111 46.857 43.0266 46.9248 43.6008C53.3274 42.5064 58.1863 37.0002 58.1865 30.3176C58.1865 29.7046 58.1273 29.0885 58.0596 28.5139ZM44.6836 16.7365C39.2383 16.7366 34.5642 19.9717 32.4648 24.5607C37.8077 25.6231 42.3008 29.1146 44.6836 33.8459C47.0667 29.1145 51.5603 25.623 56.9033 24.5607C54.8061 19.8984 50.134 16.7365 44.6836 16.7365Z" fill="white" stroke="white" stroke-width="0.594424"/><path class="nature-spark1" d="M103.179 45.2688L105.646 57.9132L117.07 51.9582L108.722 61.7705L120.5 66.9891L107.624 66.5803L110.888 79.0429L103.179 68.7209L95.4702 79.0429L98.7339 66.5803L85.8576 66.9891L97.6361 61.7705L89.2883 51.9582L100.712 57.9132L103.179 45.2688Z" fill="white"/><path class="nature-spark2" d="M124.83 7.7363L129.729 24.4889L146.482 29.3882L129.729 34.2875L124.83 51.0401L119.93 34.2875L103.178 29.3882L119.93 24.4889L124.83 7.7363Z" fill="white"/></svg>
+    </span><span class="reveal-mask"><span class="reveal-text" style="animation-delay:0.16s">and</span></span><span class="chip reveal-chip" style="animation-delay:0.24s"><!-- Kuyua cyan circle icon -->
       <svg width="89" height="89" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#66F0FF"/><circle cx="44.3966" cy="44.3973" r="22.5881" fill="#66F0FF" stroke="white" stroke-width="16.6717"/></svg>
-    </span>climate<br>
-    <span class="chip"><!-- Kuyua blue globe icon -->
+    </span><span class="reveal-mask"><span class="reveal-text" style="animation-delay:0.32s">climate</span></span><br>
+    <span class="chip reveal-chip" style="animation-delay:0.40s"><!-- Kuyua blue globe icon -->
       <svg width="93" height="93" viewBox="0 0 93 93" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="92.909" height="92.909" rx="13.0773" fill="#66F0FF"/><path d="M46.4541 13.8672C64.445 13.8675 79.0312 28.4545 79.0312 46.4454C79.031 64.4361 64.4448 79.0223 46.4541 79.0225C28.4632 79.0225 13.8762 64.4362 13.876 46.4454C13.876 28.4543 28.463 13.8672 46.4541 13.8672ZM46.4541 58.462C44.4453 58.462 42.4068 58.5561 40.3828 58.7383C41.0206 65.5671 42.1272 70.6844 43.2705 74.1856C44.3131 74.3022 45.3768 74.3829 46.4541 74.3829C47.5313 74.3829 48.587 74.309 49.6357 74.1856C50.7792 70.6844 51.8929 65.5672 52.5234 58.7383C50.5 58.5561 48.4624 58.462 46.4541 58.462ZM35.5137 59.3409C31.2116 60.0205 27.1157 61.0991 23.6133 62.4825C27.0488 67.3645 32.0082 71.1009 37.793 72.9962C37.7439 72.821 37.6948 72.65 37.6514 72.4639L37.4727 71.7413C36.5992 68.1061 35.9461 63.892 35.5137 59.3409ZM57.3926 59.3409C56.9311 64.1962 56.2117 68.6678 55.2559 72.462C55.2123 72.6487 55.1625 72.8205 55.1133 72.9962C60.8983 71.101 65.8572 67.3645 69.293 62.4825C65.7906 61.0993 61.702 60.0276 57.3926 59.3409ZM71.6689 34.4893C67.6876 36.1924 62.983 37.4912 57.751 38.2628C57.9053 40.9241 57.9941 43.6592 57.9941 46.4454C57.9941 49.231 57.9052 51.9652 57.751 54.626C62.9754 55.3975 67.6875 56.696 71.6689 58.4063C73.3978 54.7759 74.3984 50.7355 74.3984 46.4522C74.3984 42.1684 73.3981 38.1201 71.6689 34.4893ZM21.2451 34.4825C19.5161 38.1204 18.5166 42.1618 18.5166 46.4454C18.5167 50.7286 19.5163 54.7692 21.2451 58.3995C25.2192 56.6964 29.9312 55.3971 35.1631 54.6182C35.0088 51.9574 34.9199 49.2232 34.9199 46.4376C34.9199 43.6516 35.0088 40.9171 35.1631 38.2559C29.9311 37.4916 25.2191 36.1856 21.2451 34.4825ZM52.8652 38.8116C50.7864 38.9794 48.6495 39.0684 46.4541 39.0684C44.2582 39.0684 42.1203 38.9795 40.041 38.8116C39.9166 41.1878 39.8428 43.7254 39.8428 46.4454C39.8428 49.1648 39.9166 51.7015 40.041 54.0772C42.1203 53.9093 44.2582 53.8214 46.4541 53.8214C48.6498 53.8214 50.7871 53.9093 52.8662 54.0772C52.9979 51.7015 53.0718 49.1648 53.0645 46.4454C53.0645 43.7254 52.9897 41.1878 52.8652 38.8116ZM46.4541 18.5079C45.3693 18.5079 44.3127 18.5797 43.2637 18.7032C42.1275 22.2043 41.0144 27.3217 40.3838 34.1505C42.4075 34.3327 44.4456 34.4278 46.4541 34.4278C48.4621 34.4278 50.4993 34.3326 52.5225 34.1505C51.8845 27.3215 50.7791 22.2042 49.6357 18.7032C48.5937 18.5867 47.5309 18.5079 46.4541 18.5079ZM37.793 19.8926C32.0083 21.7878 27.0489 25.5246 23.6133 30.4063C27.1156 31.7896 31.2042 32.8611 35.5137 33.5479C35.9752 28.6926 36.6954 24.221 37.6514 20.4268C37.695 20.2401 37.7437 20.0684 37.793 19.8926ZM55.2568 20.4278H55.2559C56.2191 24.2218 56.9312 28.6931 57.3926 33.5479C61.6947 32.8684 65.7905 31.7897 69.293 30.4063C65.8499 25.5245 60.898 21.7876 55.1133 19.8926C55.1626 20.0687 55.2132 20.2407 55.2568 20.4278Z" fill="white" stroke="white" stroke-width="0.118885"/></svg>
-    </span>risk analysis<span class="chip"><!-- Kuyua purple stock icon -->
+    </span><span class="reveal-mask"><span class="reveal-text" style="animation-delay:0.48s">risk analysis</span></span><span class="chip reveal-chip" style="animation-delay:0.56s"><!-- Kuyua purple stock icon -->
       <svg width="157" height="93" viewBox="0 0 157 93" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="156.935" height="92.909" rx="13.0773" fill="#D04EFB"/><path d="M16.8359 77.5607L47.8714 31.6281L87.6186 70.0022L132.266 15.3482M132.266 15.3482L101.533 20.8112M132.266 15.3482V47.1273" stroke="white" stroke-width="10.6996" stroke-linecap="round"/></svg>
     </span>
   </h1>
@@ -786,5 +939,72 @@
   </div>
 </footer>
 
+<script>
+  // Navbar scroll shadow
+  window.addEventListener('scroll', function() {
+    document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  // Individual chip animations handle their own timing
+
+  // IntersectionObserver for scroll-triggered animations
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  function animOn(el, cls, delay) {
+    if (!el) return;
+    el.classList.add(cls);
+    if (delay) el.style.transitionDelay = delay;
+    io.observe(el);
+  }
+
+  // Logos
+  document.querySelectorAll('.logo-item').forEach(function(el, i) {
+    animOn(el, 'anim-fade', (i * 0.08) + 's');
+  });
+
+  // How section title
+  animOn(document.querySelector('.how-section > h2'), 'anim-fade', '0s');
+
+  // Step rows
+  document.querySelectorAll('.step-row').forEach(function(row) {
+    var rev     = row.classList.contains('rev');
+    var content = row.querySelector('.step-content');
+    var ph      = row.querySelector('.step-placeholder');
+    var visual  = ph ? ph.parentElement : null;
+    animOn(content, rev ? 'anim-right' : 'anim-left', '0s');
+    animOn(visual,  rev ? 'anim-left'  : 'anim-right', '0.18s');
+  });
+
+  // Feature cards
+  document.querySelectorAll('.feat-card').forEach(function(el, i) {
+    animOn(el, 'anim-fade', (i * 0.15) + 's');
+  });
+
+  // CTA section
+  ['.cta-section h2', '.cta-section p', '.cta-form'].forEach(function(sel, i) {
+    animOn(document.querySelector(sel), 'anim-fade', (i * 0.1) + 's');
+  });
+
+  // Newsroom
+  animOn(document.querySelector('.newsroom-header'), 'anim-fade', '0s');
+  document.querySelectorAll('.news-card').forEach(function(el, i) {
+    animOn(el, 'anim-fade', (i * 0.1) + 's');
+  });
+
+  // Compliance items
+  document.querySelectorAll('.comp-item').forEach(function(el, i) {
+    animOn(el, 'anim-fade', (i * 0.07) + 's');
+  });
+
+  // Footer wordmark
+  animOn(document.querySelector('.footer-wordmark'), 'anim-fade', '0s');
+</script>
 </body>
 </html>
