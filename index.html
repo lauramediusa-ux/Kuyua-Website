@@ -148,6 +148,7 @@
     .hero-placeholder-wrap {
       margin: 64px auto 0;
       max-width: 900px;
+      position: relative;
     }
 
     .hero-placeholder {
@@ -161,6 +162,55 @@
       display: block;
       width: 100%;
       height: auto;
+    }
+
+    /* Floating pop-up card — sits "off-grid", overlapping the right
+       edge of the hero image and breaking out into the margin */
+    .hero-popup {
+      position: absolute;
+      top: 50%;
+      right: -40px;
+      max-width: 320px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+      text-align: left;
+    }
+
+    .hero-popup p {
+      font-size: 18px;
+      line-height: 1.45;
+      letter-spacing: -0.2px;
+      color: #000;
+      margin-bottom: 22px;
+    }
+
+    .hero-popup-btn {
+      display: inline-block;
+      background: #3AE374;
+      color: #000;
+      border: none;
+      border-radius: 100px;
+      padding: 12px 26px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .hero-popup-btn:hover { opacity: 0.85; }
+
+    @media (max-width: 640px) {
+      .hero-popup {
+        position: static;
+        max-width: 100%;
+        margin-top: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        transform: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+      }
     }
 
     /* ─── LOGOS ──────────────────────────────────────────── */
@@ -569,6 +619,17 @@
       animation-delay: 1.7s;
     }
 
+    /* Pop-up card pops in once the hero image has settled */
+    @keyframes hero-popup-in {
+      from { opacity: 0; transform: translateY(calc(-50% + 20px)) scale(0.92); }
+      to   { opacity: 1; transform: translateY(-50%) scale(1); }
+    }
+    .hero-popup {
+      opacity: 0;
+      animation: hero-popup-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: 2.6s;
+    }
+
     /* ─── HERO HEADLINE REVEAL ──────────────────────── */
     /* Each word rises out of a clipping mask; each icon chip fades + scales in.
        Staggered left-to-right so the whole statement assembles itself. */
@@ -686,6 +747,14 @@
         transform: none !important;
       }
     }
+    @media (prefers-reduced-motion: reduce) and (min-width: 641px) {
+      .hero-popup {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: translateY(-50%) !important;
+      }
+    }
 
   </style>
 </head>
@@ -742,6 +811,10 @@
   <div class="hero-placeholder-wrap">
     <div class="hero-placeholder">
       <img src="hero-screenshot.jpg" alt="Kuyua dashboard showing nature and climate risk valuation for a REWE Center location in Valencia, Spain">
+    </div>
+    <div class="hero-popup">
+      <p>Understand and manage business risks associated with biodiversity loss and climate change.</p>
+      <button class="hero-popup-btn">Book a demo</button>
     </div>
   </div>
 </section>
