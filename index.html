@@ -317,9 +317,20 @@
     /* Step image placeholder */
     .step-placeholder {
       border-radius: 14px;
-      background: #F3F4F6;
-      aspect-ratio: 4 / 3;
+      background: #fff;
       width: 100%;
+      overflow: hidden;
+    }
+
+    .step-placeholder:empty {
+      aspect-ratio: 4 / 3;
+      background: #F3F4F6;
+    }
+
+    .step-placeholder img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
     /* ─── FEATURES SPLIT ─────────────────────────────────── */
@@ -843,7 +854,7 @@
         <h3 class="step-title">Map Your Location</h3>
         <p class="step-desc">Upload your asset locations and instantly see them plotted on our global risk intelligence map. Connect addresses, GPS coordinates, or portfolio data in seconds — no GIS expertise required.</p>
       </div>
-      <div><div class="step-placeholder"></div></div>
+      <div><div class="step-placeholder"><img src="step1-map.jpg" alt="Kuyua map view showing a site location with priority score, species data, and a 20km impact radius overlaid on satellite imagery"></div></div>
     </div>
 
     <!-- Step 2 -->
