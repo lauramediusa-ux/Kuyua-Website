@@ -551,6 +551,23 @@
       font-size: 22px;
     }
 
+    /* ─── REVIEWS ───────────────────────────────────────── */
+    .reviews { background: #F5F5F5; padding: 96px 56px; }
+    .reviews-inner { max-width: 1100px; margin: 0 auto; }
+    .reviews-header { text-align: center; margin-bottom: 56px; }
+    .reviews-header .section-pill { color: #000; border-color: #000; }
+    .reviews-title { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-top: 0; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .review-card { background: #fff; border-radius: 18px; padding: 32px 28px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.04); }
+    .review-stars { display: flex; gap: 4px; }
+    .review-star { color: #3AE374; font-size: 18px; line-height: 1; }
+    .review-text { font-size: 14px; line-height: 1.75; color: #444; font-weight: 400; flex: 1; }
+    .review-author { display: flex; align-items: center; gap: 14px; padding-top: 16px; border-top: 1px solid #F0F0F0; }
+    .review-avatar { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: #E8E8EA; }
+    .review-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; color: transparent; }
+    .review-name { font-size: 13px; font-weight: 700; color: #000; }
+    .review-company { font-size: 12px; color: #888; font-weight: 400; margin-top: 2px; }
+
     /* ─── NEWSROOM ───────────────────────────────────────── */
     .newsroom {
       padding: 80px 60px 100px;
@@ -1036,6 +1053,61 @@
       <div class="step-visual radius-16"><div class="step-placeholder radius-16"><img src="step4.png" alt="Kuyua dashboard showing 12 new action plans for REWE Center Valencia, with mitigation hierarchy levels and a detailed task list for minimizing soil pollution"></div></div>
     </div>
 
+  </div>
+</section>
+
+<!-- ════════════════════ REVIEWS ════════════════════ -->
+<section class="reviews">
+  <div class="reviews-inner">
+    <div class="reviews-header">
+      <div class="section-pill">What our clients say</div>
+      <h2 class="reviews-title">Trusted by sustainability leaders</h2>
+    </div>
+    <div class="reviews-grid">
+
+      <div class="review-card">
+        <div class="review-stars">
+          <span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span>
+        </div>
+        <p class="review-text">"Kuyua gave us a clear picture of where our portfolio is exposed to nature-related risks — something we simply couldn't do manually. The TNFD-aligned output saved us months of work."</p>
+        <div class="review-author">
+          <div class="review-avatar"><img src="review1.jpg" alt="Anna M."></div>
+          <div>
+            <div class="review-name">Anna M.</div>
+            <div class="review-company">Head of ESG — <strong>REWE Group</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span>
+        </div>
+        <p class="review-text">"The platform is intuitive and the science behind it is solid. We used Kuyua to complete our CSRD double materiality assessment in a fraction of the time we expected."</p>
+        <div class="review-author">
+          <div class="review-avatar"><img src="review2.jpg" alt="Thomas K."></div>
+          <div>
+            <div class="review-name">Thomas K.</div>
+            <div class="review-company">Sustainability Director — <strong>Allianz Real Estate</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span>
+        </div>
+        <p class="review-text">"Finally a tool that translates biodiversity data into something our board actually understands. Kuyua bridges the gap between science and business decision-making perfectly."</p>
+        <div class="review-author">
+          <div class="review-avatar"><img src="review3.jpg" alt="Sofia R."></div>
+          <div>
+            <div class="review-name">Sofia R.</div>
+            <div class="review-company">Chief Risk Officer — <strong>Nuveen</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
