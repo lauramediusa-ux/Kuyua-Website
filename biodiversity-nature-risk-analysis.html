@@ -92,20 +92,17 @@
     .cap-list li { font-size: 13.5px; color: #555; display: flex; align-items: center; gap: 9px; font-weight: 400; }
     .cap-bullet { width: 6px; height: 6px; border-radius: 50%; background: #3AE374; flex-shrink: 0; }
 
-    /* ─── BOTTOM DASHBOARD ────────────────────────────── */
-    .bottom-dash { background: #0d1117; padding: 80px 56px 0; text-align: center; }
-    .bottom-dash-inner { max-width: 1000px; margin: 0 auto; border-radius: 20px 20px 0 0; overflow: hidden; box-shadow: 10px 10px 60px rgba(0,0,0,.5); }
-    .bottom-dash-inner img { display: block; width: 100%; height: auto; color: transparent; }
-
-    /* ─── CTA ─────────────────────────────────────────── */
-    .page-cta { padding: 96px 56px; text-align: center; background: #0d1117; color: #fff; }
-    .page-cta h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
-    .page-cta p { font-size: 16px; color: rgba(255,255,255,.55); margin-bottom: 40px; max-width: 400px; margin-left: auto; margin-right: auto; }
-    .page-cta-btns { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    /* ─── BOTTOM CTA + DASHBOARD ─────────────────────── */
+    .bottom-cta { background: #0d1117; color: #fff; padding: 96px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .bottom-cta-text h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 16px; }
+    .bottom-cta-text p { font-size: 16px; color: rgba(255,255,255,.55); margin-bottom: 40px; line-height: 1.65; }
+    .bottom-cta-btns { display: flex; align-items: center; gap: 14px; }
     .page-cta-btn { background: #3AE374; color: #000; border: none; border-radius: 100px; padding: 16px 40px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
     .page-cta-btn:hover { opacity: .85; }
     .page-cta-btn-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.3); border-radius: 100px; padding: 16px 40px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: border-color .2s; }
     .page-cta-btn-ghost:hover { border-color: #fff; }
+    .bottom-cta-img { border-radius: 16px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.5); }
+    .bottom-cta-img img { display: block; width: 100%; height: auto; color: transparent; }
 
     /* ─── FOOTER ──────────────────────────────────────── */
     footer { background: #000; color: #fff; padding: 72px 56px 0; font-family: 'Poppins', sans-serif; }
@@ -137,6 +134,7 @@
       .process-steps { grid-template-columns: repeat(3, 1fr); }
       .process-steps::before { display: none; }
       .cap-cards { grid-template-columns: 1fr; }
+      .bottom-cta { grid-template-columns: 1fr; padding: 64px 28px; }
       .ft-top { grid-template-columns: 1fr; }
       .ft-right { align-items: flex-start; }
       footer { padding: 56px 28px 0; }
@@ -332,20 +330,18 @@
   </div>
 </section>
 
-<!-- ══════════════ BOTTOM DASHBOARD ══════════════ -->
-<section class="bottom-dash">
-  <div class="bottom-dash-inner">
-    <img src="nat-dash-bottom.png" alt="Kuyua nature risk dashboard showing biodiversity scores and ecosystem service breakdowns">
+<!-- ══════════════ BOTTOM CTA + DASHBOARD ══════════════ -->
+<section class="bottom-cta">
+  <div class="bottom-cta-text">
+    <h2>Ready to assess your<br>nature risk exposure?</h2>
+    <p>Join the companies using Kuyua to protect biodiversity and future-proof their business.</p>
+    <div class="bottom-cta-btns">
+      <button class="page-cta-btn">Book a demo</button>
+      <button class="page-cta-btn-ghost">Learn more</button>
+    </div>
   </div>
-</section>
-
-<!-- ══════════════ CTA ══════════════ -->
-<section class="page-cta">
-  <h2>Ready to assess your<br>nature risk exposure?</h2>
-  <p>Join the companies using Kuyua to protect biodiversity and future-proof their business.</p>
-  <div class="page-cta-btns">
-    <button class="page-cta-btn">Book a demo</button>
-    <button class="page-cta-btn-ghost">Learn more</button>
+  <div class="bottom-cta-img">
+    <img src="nat-dash-bottom.png" alt="Kuyua nature risk dashboard showing biodiversity scores and ecosystem service breakdowns">
   </div>
 </section>
 
