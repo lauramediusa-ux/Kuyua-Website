@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biodiversity & Nature Risk Analysis — Kuyua</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', Helvetica, Arial, sans-serif; background: #fff; color: #000; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── NAVBAR ──────────────────────────────────────── */
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 56px; position: sticky; top: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); z-index: 100; transition: box-shadow 0.3s ease; }
+    .navbar.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.09); }
+    .navbar-logo svg { height: 28px; width: auto; display: block; }
+    .navbar-right { display: flex; align-items: center; gap: 36px; font-family: 'Poppins', sans-serif; }
+    .lang-toggle { display: flex; align-items: center; border: 1.5px solid #000; border-radius: 100px; padding: 4px 6px; gap: 2px; font-size: 13px; font-weight: 500; }
+    .lang-toggle span { padding: 3px 9px; border-radius: 100px; cursor: pointer; }
+    .lang-toggle span.active { background: #000; color: #fff; font-weight: 600; }
+    .nav-links { display: flex; gap: 28px; font-size: 14px; }
+    .nav-links a { transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 0.5; }
+    .btn-login { background: #3AE374; color: #fff; border: none; border-radius: 100px; padding: 10px 26px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.2s; }
+    .btn-login:hover { opacity: 0.85; }
+
+    /* ─── SHARED ──────────────────────────────────────── */
+    .section-pill { display: inline-flex; align-items: center; border: 1.5px solid currentColor; border-radius: 100px; padding: 5px 18px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 28px; }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    .hero { background: #fff; color: #000; padding: 80px 56px 0; }
+    .hero .section-pill { color: #000; border-color: #000; }
+    .hero-title { font-size: clamp(36px, 5vw, 64px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; max-width: 680px; margin: 0 0 22px; }
+    .hero-desc { font-size: 16px; font-weight: 400; color: #666; line-height: 1.7; max-width: 540px; margin: 0 0 40px; }
+    .hero-btns { display: flex; align-items: center; justify-content: flex-start; gap: 14px; margin-bottom: 64px; }
+    .btn-primary { background: #3AE374; color: #000; border: none; border-radius: 100px; padding: 14px 34px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
+    .btn-primary:hover { opacity: .85; }
+    .btn-outline { background: transparent; color: #000; border: 1.5px solid rgba(0,0,0,.2); border-radius: 100px; padding: 14px 34px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: border-color .2s; }
+    .btn-outline:hover { border-color: #000; }
+    .hero-img-wrap { border-radius: 20px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.12); }
+    .hero-img-wrap img { display: block; width: 100%; height: auto; color: transparent; }
+
+    /* ─── HERO FEATURES ───────────────────────────────── */
+    .hero-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; padding: 64px 0 96px; border-top: 1px solid #F0F0F0; margin-top: 64px; }
+    .hero-feat-icon { width: 44px; height: 44px; border-radius: 10px; margin-bottom: 16px; display: block; }
+    .hero-feat-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .hero-feat-desc { font-size: 13px; color: #666; line-height: 1.65; font-weight: 400; }
+
+    /* ─── ESSENTIALS ──────────────────────────────────── */
+    .essentials { padding: 96px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto; }
+    .essentials-left .section-pill { color: #000; border-color: #000; }
+    .essentials-title { font-size: clamp(30px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+    .essentials-right p { font-size: 16px; color: #444; line-height: 1.8; font-weight: 400; }
+
+    /* ─── WHY IT MATTERS ──────────────────────────────── */
+    .why { background: #F5F5F5; padding: 96px 56px; }
+    .why-inner { max-width: 1200px; margin: 0 auto; }
+    .why .section-pill { color: #000; border-color: #000; }
+    .why-title { font-size: clamp(30px, 4.5vw, 56px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; max-width: 600px; margin-bottom: 14px; }
+    .why-sub { font-size: 15px; color: #666; max-width: 480px; line-height: 1.65; margin-bottom: 52px; }
+    .why-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .why-card { background: #fff; border-radius: 16px; padding: 28px 24px; box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04); }
+    .why-icon { width: 38px; height: 38px; background: #3AE374; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .why-icon svg { width: 18px; height: 18px; }
+    .why-card-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+    .why-card-desc { font-size: 13px; color: #666; line-height: 1.6; font-weight: 400; }
+
+    /* ─── OUR PROCESS ─────────────────────────────────── */
+    .process { background: #0d1117; color: #fff; padding: 96px 56px; text-align: center; }
+    .process .section-pill { color: #3AE374; border-color: #3AE374; }
+    .process-title { font-size: clamp(30px, 4.5vw, 56px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; max-width: 660px; margin: 0 auto 16px; }
+    .process-sub { font-size: 16px; color: rgba(255,255,255,.55); max-width: 520px; margin: 0 auto 72px; line-height: 1.65; }
+    .process-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; max-width: 1100px; margin: 0 auto; position: relative; }
+    .process-steps::before { content: ''; position: absolute; top: 19px; left: calc(10% + 16px); right: calc(10% + 16px); height: 1px; background: rgba(58,227,116,.25); z-index: 0; }
+    .step { text-align: left; position: relative; z-index: 1; }
+    .step-num { width: 38px; height: 38px; border-radius: 50%; background: #3AE374; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #000; margin-bottom: 20px; }
+    .step-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+    .step-desc { font-size: 12.5px; color: rgba(255,255,255,.5); line-height: 1.65; font-weight: 400; }
+
+    /* ─── CORE CAPABILITIES ───────────────────────────── */
+    .capabilities { padding: 96px 56px; background: #fff; }
+    .capabilities-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+    .capabilities .section-pill { color: #000; border-color: #000; }
+    .cap-title { font-size: clamp(28px, 4vw, 52px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; max-width: 640px; margin: 0 auto 16px; }
+    .cap-sub { font-size: 15px; color: #666; max-width: 480px; margin: 0 auto 60px; line-height: 1.65; }
+    .cap-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+    .cap-card { border: 1.5px solid #E8E8EA; border-radius: 18px; padding: 36px 32px; transition: box-shadow .2s; }
+    .cap-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,.08); }
+    .cap-emoji { font-size: 28px; margin-bottom: 18px; display: block; line-height: 1; }
+    .cap-card-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+    .cap-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .cap-list li { font-size: 13.5px; color: #555; display: flex; align-items: center; gap: 9px; font-weight: 400; }
+    .cap-bullet { width: 6px; height: 6px; border-radius: 50%; background: #3AE374; flex-shrink: 0; }
+
+    /* ─── BOTTOM DASHBOARD ────────────────────────────── */
+    .bottom-dash { background: #0d1117; padding: 80px 56px 0; text-align: center; }
+    .bottom-dash-inner { max-width: 1000px; margin: 0 auto; border-radius: 20px 20px 0 0; overflow: hidden; box-shadow: 10px 10px 60px rgba(0,0,0,.5); }
+    .bottom-dash-inner img { display: block; width: 100%; height: auto; color: transparent; }
+
+    /* ─── CTA ─────────────────────────────────────────── */
+    .page-cta { padding: 96px 56px; text-align: center; background: #0d1117; color: #fff; }
+    .page-cta h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
+    .page-cta p { font-size: 16px; color: rgba(255,255,255,.55); margin-bottom: 40px; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .page-cta-btns { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .page-cta-btn { background: #3AE374; color: #000; border: none; border-radius: 100px; padding: 16px 40px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
+    .page-cta-btn:hover { opacity: .85; }
+    .page-cta-btn-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.3); border-radius: 100px; padding: 16px 40px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: border-color .2s; }
+    .page-cta-btn-ghost:hover { border-color: #fff; }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer { background: #000; color: #fff; padding: 72px 56px 0; font-family: 'Poppins', sans-serif; }
+    .ft-top { display: grid; grid-template-columns: 1fr 1.3fr 0.7fr; gap: 64px; }
+    .ft-company { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+    .ft-address { font-size: 13px; line-height: 1.85; color: rgba(255,255,255,.55); font-weight: 400; margin-bottom: 32px; }
+    .ft-sdgs { display: flex; gap: 7px; flex-wrap: wrap; }
+    .sdg-chip { width: 46px; height: 46px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; color: #fff; flex-shrink: 0; }
+    .ft-heading { font-size: 12px; font-weight: 800; letter-spacing: 1.8px; text-transform: uppercase; margin-bottom: 20px; color: #fff; }
+    .ft-body { font-size: 13.5px; line-height: 1.78; color: rgba(255,255,255,.65); font-weight: 400; }
+    .ft-right { display: flex; flex-direction: column; align-items: flex-end; }
+    .ft-nav-link { font-size: 14px; font-weight: 800; color: #fff; display: block; padding: 9px 0; text-transform: uppercase; transition: opacity .2s; text-decoration: none; }
+    .ft-nav-link:hover { opacity: .5; }
+    .ft-nav-link.muted { font-weight: 500; font-size: 11px; letter-spacing: 1.2px; color: rgba(255,255,255,.35); margin-top: 6px; }
+    .ft-linkedin { display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; background: #fff; border-radius: 10px; margin-top: 20px; transition: opacity .2s; text-decoration: none; }
+    .ft-linkedin:hover { opacity: .8; }
+    .ft-linkedin svg { width: 26px; height: 26px; fill: #000; }
+    .ft-wordmark { margin-top: 200px; margin-bottom: 0; line-height: 0; }
+    .ft-wordmark img { display: block; width: 100%; height: auto; }
+    .ft-bottom { padding: 10px 0 20px; font-size: 11px; color: rgba(255,255,255,.3); letter-spacing: 0.8px; text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      .navbar { padding: 18px 28px; }
+      .hero { padding: 64px 28px 0; }
+      .hero-features { grid-template-columns: 1fr; }
+      .essentials { grid-template-columns: 1fr; gap: 40px; padding: 64px 28px; }
+      .why-cards { grid-template-columns: repeat(2, 1fr); }
+      .why, .process, .capabilities { padding: 64px 28px; }
+      .process-steps { grid-template-columns: repeat(3, 1fr); }
+      .process-steps::before { display: none; }
+      .cap-cards { grid-template-columns: 1fr; }
+      .ft-top { grid-template-columns: 1fr; }
+      .ft-right { align-items: flex-start; }
+      footer { padding: 56px 28px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav class="navbar">
+  <a class="navbar-logo" href="index.html">
+    <svg viewBox="0 0 483.18 143.66" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="35.39" height="111.39" fill="#000"/>
+      <path d="M52,55.98v-.81c11.6-1.48,22.08-6.15,30.16-14.24C92.67,30.42,97.43,15.86,96.89.04c-15.82-.54-30.38,4.22-40.89,14.73-10.49,10.49-15.25,25.01-14.73,40.8h0c-.52,15.79,4.24,30.31,14.73,40.8,10.51,10.51,25.06,15.27,40.89,14.73.54-15.82-4.22-30.38-14.73-40.89-8.08-8.08-18.56-12.75-30.16-14.24Z" fill="#000"/>
+      <path d="M192.78,30.57v80.82h-31.95v-11.75h-.47c-5.48,9.87-14.41,13.63-25.06,13.63-16.6,0-27.57-9.24-27.57-32.58V30.57h32.58v44.8c0,6.42,2.82,10.65,9.24,10.65,5.33,0,10.65-2.98,10.65-10.81V30.57h32.58Z" fill="#000"/>
+      <path d="M295.54,30.57l-31.8,82.07c-10.18,26.16-20.52,31.01-45.74,31.01-3.6,0-7.83,0-14.25-.31v-25.06h14.72c6.89,0,9.87-2.35,9.87-7.67,0-1.72-.47-3.76-1.41-6.11l-29.6-73.93h34.77l4.39,14.72c3.6,12.37,6.26,22.71,10.34,39.47,4.7-16.76,7.52-27.1,11.12-39.47l4.23-14.72h33.36Z" fill="#000"/>
+      <path d="M384.35,30.57v80.82h-31.95v-11.75h-.47c-5.48,9.87-14.41,13.63-25.06,13.63-16.6,0-27.57-9.24-27.57-32.58V30.57h32.58v44.8c0,6.42,2.82,10.65,9.24,10.65,5.33,0,10.65-2.98,10.65-10.81V30.57h32.58Z" fill="#000"/>
+      <path d="M450.45,111.39c-1.25-2.51-2.19-5.95-2.35-9.4-4.39,7.52-13.16,12.06-26,12.06-17.07,0-29.76-7.83-29.76-24.9,0-14.1,8.61-22.87,30.86-25.06l14.72-1.41c6.58-.63,9.71-1.88,9.71-6.11s-3.13-5.95-9.08-5.95c-6.26,0-9.24,1.88-9.71,7.99h-32.58c.78-19.74,12.84-29.92,42.76-29.92s41.19,9.4,41.19,25.84v44.01c0,4.54.94,8.61,2.98,12.84h-32.74ZM447.63,80.53v-5.32c-1.25,1.88-3.45,2.82-7.05,3.29l-7.52.94c-5.17.63-7.68,2.82-7.68,7.05,0,4.86,3.29,7.21,9.56,7.21,8.3,0,12.69-4.39,12.69-13.16Z" fill="#000"/>
+    </svg>
+  </a>
+  <div class="navbar-right">
+    <div class="lang-toggle">
+      <span class="active">EN</span><span>DE</span><span>FR</span>
+    </div>
+    <div class="nav-links">
+      <a href="#">Contact us</a>
+      <a href="#">jobs</a>
+      <a href="#">Book a demo</a>
+    </div>
+    <button class="btn-login">Log in</button>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="section-pill">Biodiversity &amp; Nature Risk Analysis</div>
+  <h1 class="hero-title">Nature risk analysis<br>for future-proof<br>business decisions</h1>
+  <p class="hero-desc">Understand how your operations depend on and impact nature — and turn that knowledge into regulatory-ready disclosures and strategic action.</p>
+  <div class="hero-btns">
+    <button class="btn-primary">Request a demo</button>
+    <button class="btn-outline">See how it works</button>
+  </div>
+  <div class="hero-img-wrap">
+    <img src="feat-nature.png" alt="Kuyua nature risk map showing a site location with biodiversity priority score">
+  </div>
+
+  <div class="hero-features">
+    <div class="hero-feat">
+      <!-- Yellow circle icon — Physical Nature Risks -->
+      <svg class="hero-feat-icon" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#F5FF66"/><circle cx="44.3966" cy="44.3973" r="22.5881" fill="#F5FF66" stroke="white" stroke-width="16.6717"/></svg>
+      <div class="hero-feat-title">Physical Nature Risks</div>
+      <p class="hero-feat-desc">Dependencies and impacts across ecosystem services, habitats, and species — assessed at each operational location.</p>
+    </div>
+    <div class="hero-feat">
+      <!-- Pink arrow icon — Transition Nature Risk -->
+      <svg class="hero-feat-icon" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#FF5C7A"/><path d="M24 65L65 24M65 24H42M65 24V47" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="hero-feat-title">Transition Nature Risk</div>
+      <p class="hero-feat-desc">Regulation such as TNFD, EU Taxonomy, and supply chain requirements.</p>
+    </div>
+    <div class="hero-feat">
+      <!-- Cyan dot icon — Vulnerability & Resilience -->
+      <svg class="hero-feat-icon" viewBox="0 0 93 93" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="92.909" height="92.909" rx="13.0773" fill="#66F0FF"/><circle cx="46.4541" cy="46.4454" r="32.5776" fill="white"/></svg>
+      <div class="hero-feat-title">Vulnerability &amp; Resilience</div>
+      <p class="hero-feat-desc">Location-specific exposure scoring and resilience pathways to biodiversity-related risks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ THE ESSENTIALS ══════════════ -->
+<section style="background:#fff; padding: 0;">
+  <div class="essentials">
+    <div class="essentials-left">
+      <div class="section-pill">The Essentials</div>
+      <h2 class="essentials-title">What is nature risk analysis?</h2>
+    </div>
+    <div class="essentials-right">
+      <p>Nature risk analysis helps companies understand how their operations depend on and impact biodiversity and ecosystem services. Kuyua assesses these risks at a location level — identifying where your assets are exposed to nature-related threats, quantifying the financial value at stake, and showing where early action can protect long-term business value.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ WHY IT MATTERS ══════════════ -->
+<section class="why">
+  <div class="why-inner">
+    <div class="section-pill">Why it matters</div>
+    <h2 class="why-title">Why nature risk matters<br>for your business</h2>
+    <p class="why-sub">More than half of global GDP depends on nature. The businesses that act first will be best positioned to thrive.</p>
+
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="why-card-title">Regulatory compliance</div>
+        <p class="why-card-desc">TNFD, CSRD, and EU Taxonomy now require companies to assess and disclose nature-related risks and dependencies.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="why-card-title">Value chain exposure</div>
+        <p class="why-card-desc">Supply chains depend on healthy ecosystems. Biodiversity loss disrupts raw materials, water access, and agricultural inputs.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="why-card-title">Financial materiality</div>
+        <p class="why-card-desc">Nature loss translates into real asset value loss. Kuyua quantifies this in monetary terms so you can prioritize action.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>
+        </div>
+        <div class="why-card-title">Investor expectations</div>
+        <p class="why-card-desc">ESG frameworks and institutional investors increasingly require biodiversity disclosure and science-based target-setting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ OUR PROCESS ══════════════ -->
+<section class="process">
+  <div class="section-pill">Our Process</div>
+  <h2 class="process-title">How Kuyua analyzes<br>nature &amp; biodiversity risks</h2>
+  <p class="process-sub">A science-based methodology aligned with TNFD LEAP — from location data to actionable nature intelligence.</p>
+
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Map your footprint</div>
+      <p class="step-desc">Geolocate all operations and supply chain sites against biodiversity-sensitive areas and ecosystem boundaries.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Assess dependencies</div>
+      <p class="step-desc">Identify which ecosystem services — water, pollination, soil, climate regulation — your business relies on at each site.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Evaluate impacts</div>
+      <p class="step-desc">Quantify how your operations affect local biodiversity, habitats, and threatened species in surrounding areas.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-title">Score &amp; benchmark</div>
+      <p class="step-desc">Generate comparable risk scores per location, aligned with TNFD LEAP, GRI, and double materiality standards.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-title">Report &amp; act</div>
+      <p class="step-desc">Export disclosures ready for CSRD, TNFD, and EU Taxonomy — and translate insights into mitigation and restoration actions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CORE CAPABILITIES ══════════════ -->
+<section class="capabilities">
+  <div class="capabilities-inner">
+    <div class="section-pill">Core Capabilities</div>
+    <h2 class="cap-title">What you get with Kuyua's nature risk analysis</h2>
+    <p class="cap-sub">A comprehensive view of nature-related risks across three critical dimensions.</p>
+
+    <div class="cap-cards">
+      <div class="cap-card">
+        <span class="cap-emoji">🌿</span>
+        <div class="cap-card-title">Ecosystem services</div>
+        <ul class="cap-list">
+          <li><div class="cap-bullet"></div>Pollination &amp; crop yield dependency</li>
+          <li><div class="cap-bullet"></div>Water regulation &amp; freshwater access</li>
+          <li><div class="cap-bullet"></div>Soil formation &amp; carbon sequestration</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <span class="cap-emoji">🦋</span>
+        <div class="cap-card-title">Species &amp; habitats</div>
+        <ul class="cap-list">
+          <li><div class="cap-bullet"></div>Threatened species proximity</li>
+          <li><div class="cap-bullet"></div>Protected area &amp; habitat overlap</li>
+          <li><div class="cap-bullet"></div>Habitat connectivity &amp; integrity</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <span class="cap-emoji">📋</span>
+        <div class="cap-card-title">Regulatory alignment</div>
+        <ul class="cap-list">
+          <li><div class="cap-bullet"></div>TNFD LEAP methodology</li>
+          <li><div class="cap-bullet"></div>EU Taxonomy &amp; CSRD alignment</li>
+          <li><div class="cap-bullet"></div>GRI &amp; double materiality reporting</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ BOTTOM DASHBOARD ══════════════ -->
+<section class="bottom-dash">
+  <div class="bottom-dash-inner">
+    <img src="nat-dash-bottom.png" alt="Kuyua nature risk dashboard showing biodiversity scores and ecosystem service breakdowns">
+  </div>
+</section>
+
+<!-- ══════════════ CTA ══════════════ -->
+<section class="page-cta">
+  <h2>Ready to assess your<br>nature risk exposure?</h2>
+  <p>Join the companies using Kuyua to protect biodiversity and future-proof their business.</p>
+  <div class="page-cta-btns">
+    <button class="page-cta-btn">Book a demo</button>
+    <button class="page-cta-btn-ghost">Learn more</button>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <p class="ft-company">Kuyua GmbH</p>
+      <p class="ft-address">Bornstraße 3<br>20146 Hamburg<br>Commercial Register: HRB 182987<br>Registration court: Hamburg</p>
+      <div class="ft-sdgs">
+        <div class="sdg-chip" style="background:#26BDE2">6</div>
+        <div class="sdg-chip" style="background:#FD9D24">11</div>
+        <div class="sdg-chip" style="background:#BF8B2E">12</div>
+        <div class="sdg-chip" style="background:#3F7E44">13</div>
+        <div class="sdg-chip" style="background:#0A97D9">14</div>
+        <div class="sdg-chip" style="background:#56C02B">15</div>
+        <div class="sdg-chip" style="background:#19486A">17</div>
+      </div>
+    </div>
+    <div>
+      <p class="ft-heading">About us</p>
+      <p class="ft-body">Our mission is to empower companies to comprehend their impact on nature, as well as their dependencies and associated business risks – and to show paths towards safeguarding both, natural and capital assets.</p>
+    </div>
+    <div class="ft-right">
+      <a href="#" class="ft-nav-link">Contact us</a>
+      <a href="#" class="ft-nav-link">Jobs</a>
+      <a href="#" class="ft-nav-link">Book a demo</a>
+      <a href="#" class="ft-nav-link muted">Imprint &amp; Privacy</a>
+      <a href="#" class="ft-linkedin" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="ft-wordmark">
+    <img src="kuyua-wordmark.png" alt="Kuyua">
+  </div>
+  <div class="ft-bottom">&copy; 2026 Kuyua</div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', function() {
+    document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+</script>
+</body>
+</html>
