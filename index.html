@@ -314,9 +314,15 @@
       line-height: 1.78;
     }
 
+    /* Step image visual wrapper — carries the drop shadow */
+    .step-visual {
+      border-radius: 20px;
+      box-shadow: 10px 10px 30px 0 rgba(0,0,0,0.12);
+    }
+
     /* Step image placeholder */
     .step-placeholder {
-      border-radius: 14px;
+      border-radius: 20px;
       background: #fff;
       width: 100%;
       overflow: hidden;
@@ -325,6 +331,11 @@
     .step-placeholder:empty {
       aspect-ratio: 4 / 3;
       background: #F3F4F6;
+    }
+
+    /* Step 5 — slightly tighter corner radius */
+    .radius-16 {
+      border-radius: 16px;
     }
 
     .step-placeholder img {
@@ -338,52 +349,97 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       margin: 0 56px 100px;
+      gap: 24px;
+    }
+
+    .feat-card-link {
+      display: block;
       border-radius: 24px;
-      overflow: hidden;
-      gap: 4px;
-      background: #111;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .feat-card-link:hover {
+      transform: translateY(-6px);
+      box-shadow: 10px 10px 30px 0 rgba(0,0,0,0.18);
     }
 
     .feat-card {
-      padding: 52px;
-      min-height: 480px;
+      padding: 56px 52px;
+      border-radius: 24px;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
 
     .feat-card.climate { background: #0d1117; color: #fff; }
     .feat-card.nature  { background: #071610; color: #fff; }
 
-    .feat-label {
-      font-family: 'Poppins', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #3AE374;
-      margin-bottom: 10px;
-    }
-
     .feat-title {
-      font-size: clamp(20px, 2.2vw, 28px);
+      font-size: clamp(26px, 2.8vw, 38px);
       font-weight: 800;
       line-height: 1.2;
-      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0 auto 16px;
+      max-width: 460px;
     }
 
     .feat-desc {
-      font-size: 14px;
+      font-size: 15px;
       opacity: 0.6;
       line-height: 1.7;
-      margin-bottom: 32px;
+      text-align: center;
+      max-width: 420px;
+      margin: 0 auto 36px;
     }
 
-    /* Feature placeholder */
-    .feat-placeholder {
-      flex: 1;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.05);
-      min-height: 160px;
+    /* Dashboard screenshot visual */
+    .feat-visual {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 10px 10px 30px 0 rgba(0,0,0,0.25);
+      margin-bottom: 44px;
+    }
+
+    .feat-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Three icon + text feature rows */
+    .feat-points {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      margin-top: auto;
+    }
+
+    .feat-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .feat-point-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+    }
+
+    .feat-point-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .feat-point-desc {
+      font-size: 13px;
+      opacity: 0.55;
+      line-height: 1.6;
     }
 
     /* ─── CTA ────────────────────────────────────────────── */
@@ -847,58 +903,47 @@
   <div class="steps-list">
 
     <!-- Step 1 -->
-    <div class="step-row">
-      <div class="step-content">
-        <div class="step-badge bg-green"><span class="badge-dot"></span>Step One</div>
-        <div class="step-icon-box" style="background:#DCFCE7">📍</div>
-        <h3 class="step-title">Map Your Location</h3>
-        <p class="step-desc">Upload your asset locations and instantly see them plotted on our global risk intelligence map. Connect addresses, GPS coordinates, or portfolio data in seconds — no GIS expertise required.</p>
-      </div>
-      <div><div class="step-placeholder"><img src="step1-map.jpg" alt="Kuyua map view showing a site location with priority score, species data, and a 20km impact radius overlaid on satellite imagery"></div></div>
-    </div>
-
-    <!-- Step 2 -->
     <div class="step-row rev">
       <div class="step-content">
-        <div class="step-badge bg-orange"><span class="badge-dot"></span>Step Two</div>
+        <div class="step-badge bg-orange"><span class="badge-dot"></span>Step One</div>
         <div class="step-icon-box" style="background:#FEF3C7">📊</div>
         <h3 class="step-title">Analyze Environmental Risks</h3>
         <p class="step-desc">Get a comprehensive risk assessment for each asset, covering physical climate hazards (flood, drought, heat, wildfire), nature dependencies, and regulatory exposure — powered by IPCC and TNFD science.</p>
       </div>
-      <div><div class="step-placeholder"></div></div>
+      <div class="step-visual"><div class="step-placeholder"><img src="step2-risk.png" alt="Kuyua risk valuation breakdown showing nature value loss of -7.3 million euros across ecosystem service flows, soil organic carbon, biodiversity, and water-related values"></div></div>
     </div>
 
-    <!-- Step 3 -->
+    <!-- Step 2 -->
     <div class="step-row">
       <div class="step-content">
-        <div class="step-badge bg-green"><span class="badge-dot"></span>Step Three</div>
+        <div class="step-badge bg-green"><span class="badge-dot"></span>Step Two</div>
         <div class="step-icon-box" style="background:#DCFCE7">💰</div>
         <h3 class="step-title">Translate Risks Into Financial Impact</h3>
         <p class="step-desc">Convert environmental scores into monetary terms. Understand Value at Risk (VaR), stranded asset exposure, and potential write-downs — aligned with TCFD, TNFD, and CSRD reporting requirements.</p>
       </div>
-      <div><div class="step-placeholder"></div></div>
+      <div class="step-visual"><div class="step-placeholder"><img src="step3-dashboard.png" alt="Kuyua dashboard for REWE Center, Valencia, Spain showing a risk valuation of -7.3 million euros and a valuation breakdown by ecosystem service flow and above-ground biomass"></div></div>
     </div>
 
-    <!-- Step 4 -->
+    <!-- Step 3 -->
     <div class="step-row rev">
       <div class="step-content">
-        <div class="step-badge bg-purple"><span class="badge-dot"></span>Step Four</div>
+        <div class="step-badge bg-purple"><span class="badge-dot"></span>Step Three</div>
         <div class="step-icon-box" style="background:#F3E8FF">🔍</div>
         <h3 class="step-title">Risk Evolution Foresight and Monitoring</h3>
         <p class="step-desc">Track how risks evolve across climate scenarios (1.5°C, 2°C, 4°C). Receive alerts when new hazards emerge and monitor your portfolio's risk trajectory in real time with automated updates.</p>
       </div>
-      <div><div class="step-placeholder"></div></div>
+      <div class="step-visual"><div class="step-placeholder"><img src="step4-risk-evolution.png" alt="Kuyua dashboard showing total nature value of 6,514M, nature value at risk of 3.23M, and a breakdown of nature risk and climate risk across the portfolio"></div></div>
     </div>
 
-    <!-- Step 5 -->
+    <!-- Step 4 -->
     <div class="step-row">
       <div class="step-content">
-        <div class="step-badge bg-red"><span class="badge-dot"></span>Step Five</div>
+        <div class="step-badge bg-red"><span class="badge-dot"></span>Step Four</div>
         <div class="step-icon-box" style="background:#FEE2E2">📋</div>
         <h3 class="step-title">Act and Report With Confidence</h3>
         <p class="step-desc">Generate audit-ready reports aligned with CSRD, TCFD, TNFD, and EU Taxonomy. Export boardroom-ready decks and regulatory filings with a single click — and turn risk insight into strategic action.</p>
       </div>
-      <div><div class="step-placeholder"></div></div>
+      <div class="step-visual radius-16"><div class="step-placeholder radius-16"><img src="step5-act-report.png" alt="Kuyua dashboard showing 12 new action plans for REWE Center Valencia, with mitigation hierarchy levels and a detailed task list for minimizing soil pollution"></div></div>
     </div>
 
   </div>
@@ -908,19 +953,67 @@
 <section>
   <div class="features-split">
 
+    <a class="feat-card-link" href="climate-risk-analysis.html">
     <div class="feat-card climate">
-      <div class="feat-label">Climate Analysis</div>
-      <h3 class="feat-title">Climate Risks Analysis</h3>
+      <h3 class="feat-title">Climate Risks<br>Analysis</h3>
       <p class="feat-desc">Assess exposure to physical climate hazards — floods, droughts, extreme heat, wildfires — across your entire asset base. Quantify transition risks as regulations tighten globally.</p>
-      <div class="feat-placeholder"></div>
+      <div class="feat-visual"><img src="feat-climate.png" alt="Kuyua dashboard showing business risk scores and exposure breakdowns across a real estate portfolio"></div>
+      <div class="feat-points">
+        <div class="feat-point">
+          <svg class="feat-point-icon" width="44" height="44" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#66F0FF"/><circle cx="44.3966" cy="44.3973" r="22.5881" fill="#66F0FF" stroke="white" stroke-width="16.6717"/></svg>
+          <div>
+            <h4 class="feat-point-title">Physical climate risks</h4>
+            <p class="feat-point-desc">28 acute and chronic climate hazards for each location, covering today, 2035, 2050, and 2100.</p>
+          </div>
+        </div>
+        <div class="feat-point">
+          <svg class="feat-point-icon" width="44" height="44" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#D04EFB"/><path d="M24 65L65 24M65 24H42M65 24V47" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div>
+            <h4 class="feat-point-title">Transition Climate Risk</h4>
+            <p class="feat-point-desc">Exposure to climate regulation, carbon pricing, and industry-specific transitions.</p>
+          </div>
+        </div>
+        <div class="feat-point">
+          <svg class="feat-point-icon" width="44" height="44" viewBox="0 0 93 93" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="92.909" height="92.909" rx="13.0773" fill="#45F974"/><path d="M46.4541 13.8672C64.445 13.8675 79.0312 28.4545 79.0312 46.4454C79.031 64.4361 64.4448 79.0223 46.4541 79.0225C28.4632 79.0225 13.8762 64.4362 13.876 46.4454C13.876 28.4543 28.463 13.8672 46.4541 13.8672ZM46.4541 58.462C44.4453 58.462 42.4068 58.5561 40.3828 58.7383C41.0206 65.5671 42.1272 70.6844 43.2705 74.1856C44.3131 74.3022 45.3768 74.3829 46.4541 74.3829C47.5313 74.3829 48.587 74.309 49.6357 74.1856C50.7792 70.6844 51.8929 65.5672 52.5234 58.7383C50.5 58.5561 48.4624 58.462 46.4541 58.462ZM35.5137 59.3409C31.2116 60.0205 27.1157 61.0991 23.6133 62.4825C27.0488 67.3645 32.0082 71.1009 37.793 72.9962C37.7439 72.821 37.6948 72.65 37.6514 72.4639L37.4727 71.7413C36.5992 68.1061 35.9461 63.892 35.5137 59.3409ZM57.3926 59.3409C56.9311 64.1962 56.2117 68.6678 55.2559 72.462C55.2123 72.6487 55.1625 72.8205 55.1133 72.9962C60.8983 71.101 65.8572 67.3645 69.293 62.4825C65.7906 61.0993 61.702 60.0276 57.3926 59.3409ZM71.6689 34.4893C67.6876 36.1924 62.983 37.4912 57.751 38.2628C57.9053 40.9241 57.9941 43.6592 57.9941 46.4454C57.9941 49.231 57.9052 51.9652 57.751 54.626C62.9754 55.3975 67.6875 56.696 71.6689 58.4063C73.3978 54.7759 74.3984 50.7355 74.3984 46.4522C74.3984 42.1684 73.3981 38.1201 71.6689 34.4893ZM21.2451 34.4825C19.5161 38.1204 18.5166 42.1618 18.5166 46.4454C18.5167 50.7286 19.5163 54.7692 21.2451 58.3995C25.2192 56.6964 29.9312 55.3971 35.1631 54.6182C35.0088 51.9574 34.9199 49.2232 34.9199 46.4376C34.9199 43.6516 35.0088 40.9171 35.1631 38.2559C29.9311 37.4916 25.2191 36.1856 21.2451 34.4825ZM52.8652 38.8116C50.7864 38.9794 48.6495 39.0684 46.4541 39.0684C44.2582 39.0684 42.1203 38.9795 40.041 38.8116C39.9166 41.1878 39.8428 43.7254 39.8428 46.4454C39.8428 49.1648 39.9166 51.7015 40.041 54.0772C42.1203 53.9093 44.2582 53.8214 46.4541 53.8214C48.6498 53.8214 50.7871 53.9093 52.8662 54.0772C52.9979 51.7015 53.0718 49.1648 53.0645 46.4454C53.0645 43.7254 52.9897 41.1878 52.8652 38.8116ZM46.4541 18.5079C45.3693 18.5079 44.3127 18.5797 43.2637 18.7032C42.1275 22.2043 41.0144 27.3217 40.3838 34.1505C42.4075 34.3327 44.4456 34.4278 46.4541 34.4278C48.4621 34.4278 50.4993 34.3326 52.5225 34.1505C51.8845 27.3215 50.7791 22.2042 49.6357 18.7032C48.5937 18.5867 47.5309 18.5079 46.4541 18.5079ZM37.793 19.8926C32.0083 21.7878 27.0489 25.5246 23.6133 30.4063C27.1156 31.7896 31.2042 32.8611 35.5137 33.5479C35.9752 28.6926 36.6954 24.221 37.6514 20.4268C37.695 20.2401 37.7437 20.0684 37.793 19.8926ZM55.2568 20.4278H55.2559C56.2191 24.2218 56.9312 28.6931 57.3926 33.5479C61.6947 32.8684 65.7905 31.7897 69.293 30.4063C65.8499 25.5245 60.898 21.7876 55.1133 19.8926C55.1626 20.0687 55.2132 20.2407 55.2568 20.4278Z" fill="white" stroke="white" stroke-width="0.118885"/></svg>
+          <div>
+            <h4 class="feat-point-title">Vulnerability & Resilience</h4>
+            <p class="feat-point-desc">Location-specific exposure and resilience to climate-related risks.</p>
+          </div>
+        </div>
+      </div>
     </div>
+    </a>
 
+    <a class="feat-card-link" href="biodiversity-nature-risk-analysis.html">
     <div class="feat-card nature">
-      <div class="feat-label">Nature Analysis</div>
-      <h3 class="feat-title">Biodiversity & Nature Risk Analysis</h3>
+      <h3 class="feat-title">Biodiversity &<br>Nature Risk Analysis</h3>
       <p class="feat-desc">Understand your dependencies and impacts on nature. Identify critical ecosystem services and assess biodiversity risk aligned with TNFD LEAP and GRI frameworks.</p>
-      <div class="feat-placeholder"></div>
+      <div class="feat-visual"><img src="feat-nature.png" alt="Kuyua map view showing a site location with a priority score of 24.7 overlaid on satellite imagery"></div>
+      <div class="feat-points">
+        <div class="feat-point">
+          <svg class="feat-point-icon" width="44" height="44" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#F5FF66"/><circle cx="44.3966" cy="44.3973" r="22.5881" fill="#F5FF66" stroke="white" stroke-width="16.6717"/></svg>
+          <div>
+            <h4 class="feat-point-title">Physical Nature Risks</h4>
+            <p class="feat-point-desc">Dependencies and impacts across ecosystem services, habitats, and species for each location.</p>
+          </div>
+        </div>
+        <div class="feat-point">
+          <svg class="feat-point-icon" width="44" height="44" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#FF5C7A"/><path d="M24 65L65 24M65 24H42M65 24V47" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div>
+            <h4 class="feat-point-title">Transition Nature Risk</h4>
+            <p class="feat-point-desc">Exposure to nature-related regulation such as TNFD, EU Taxonomy, and supply chain requirements.</p>
+          </div>
+        </div>
+        <div class="feat-point">
+          <svg class="feat-point-icon" width="44" height="44" viewBox="0 0 93 93" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="92.909" height="92.909" rx="13.0773" fill="#66F0FF"/><path d="M46.4541 13.8672C64.445 13.8675 79.0312 28.4545 79.0312 46.4454C79.031 64.4361 64.4448 79.0223 46.4541 79.0225C28.4632 79.0225 13.8762 64.4362 13.876 46.4454C13.876 28.4543 28.463 13.8672 46.4541 13.8672ZM46.4541 58.462C44.4453 58.462 42.4068 58.5561 40.3828 58.7383C41.0206 65.5671 42.1272 70.6844 43.2705 74.1856C44.3131 74.3022 45.3768 74.3829 46.4541 74.3829C47.5313 74.3829 48.587 74.309 49.6357 74.1856C50.7792 70.6844 51.8929 65.5672 52.5234 58.7383C50.5 58.5561 48.4624 58.462 46.4541 58.462ZM35.5137 59.3409C31.2116 60.0205 27.1157 61.0991 23.6133 62.4825C27.0488 67.3645 32.0082 71.1009 37.793 72.9962C37.7439 72.821 37.6948 72.65 37.6514 72.4639L37.4727 71.7413C36.5992 68.1061 35.9461 63.892 35.5137 59.3409ZM57.3926 59.3409C56.9311 64.1962 56.2117 68.6678 55.2559 72.462C55.2123 72.6487 55.1625 72.8205 55.1133 72.9962C60.8983 71.101 65.8572 67.3645 69.293 62.4825C65.7906 61.0993 61.702 60.0276 57.3926 59.3409ZM71.6689 34.4893C67.6876 36.1924 62.983 37.4912 57.751 38.2628C57.9053 40.9241 57.9941 43.6592 57.9941 46.4454C57.9941 49.231 57.9052 51.9652 57.751 54.626C62.9754 55.3975 67.6875 56.696 71.6689 58.4063C73.3978 54.7759 74.3984 50.7355 74.3984 46.4522C74.3984 42.1684 73.3981 38.1201 71.6689 34.4893ZM21.2451 34.4825C19.5161 38.1204 18.5166 42.1618 18.5166 46.4454C18.5167 50.7286 19.5163 54.7692 21.2451 58.3995C25.2192 56.6964 29.9312 55.3971 35.1631 54.6182C35.0088 51.9574 34.9199 49.2232 34.9199 46.4376C34.9199 43.6516 35.0088 40.9171 35.1631 38.2559C29.9311 37.4916 25.2191 36.1856 21.2451 34.4825ZM52.8652 38.8116C50.7864 38.9794 48.6495 39.0684 46.4541 39.0684C44.2582 39.0684 42.1203 38.9795 40.041 38.8116C39.9166 41.1878 39.8428 43.7254 39.8428 46.4454C39.8428 49.1648 39.9166 51.7015 40.041 54.0772C42.1203 53.9093 44.2582 53.8214 46.4541 53.8214C48.6498 53.8214 50.7871 53.9093 52.8662 54.0772C52.9979 51.7015 53.0718 49.1648 53.0645 46.4454C53.0645 43.7254 52.9897 41.1878 52.8652 38.8116ZM46.4541 18.5079C45.3693 18.5079 44.3127 18.5797 43.2637 18.7032C42.1275 22.2043 41.0144 27.3217 40.3838 34.1505C42.4075 34.3327 44.4456 34.4278 46.4541 34.4278C48.4621 34.4278 50.4993 34.3326 52.5225 34.1505C51.8845 27.3215 50.7791 22.2042 49.6357 18.7032C48.5937 18.5867 47.5309 18.5079 46.4541 18.5079ZM37.793 19.8926C32.0083 21.7878 27.0489 25.5246 23.6133 30.4063C27.1156 31.7896 31.2042 32.8611 35.5137 33.5479C35.9752 28.6926 36.6954 24.221 37.6514 20.4268C37.695 20.2401 37.7437 20.0684 37.793 19.8926ZM55.2568 20.4278H55.2559C56.2191 24.2218 56.9312 28.6931 57.3926 33.5479C61.6947 32.8684 65.7905 31.7897 69.293 30.4063C65.8499 25.5245 60.898 21.7876 55.1133 19.8926C55.1626 20.0687 55.2132 20.2407 55.2568 20.4278Z" fill="white" stroke="white" stroke-width="0.118885"/></svg>
+          <div>
+            <h4 class="feat-point-title">Vulnerability & Resilience</h4>
+            <p class="feat-point-desc">Location-specific exposure and resilience to biodiversity-related risks.</p>
+          </div>
+        </div>
+      </div>
     </div>
+    </a>
 
   </div>
 </section>
