@@ -333,6 +333,20 @@
       background: #F3F4F6;
     }
 
+    /* Hide broken image alt text — show a grey box instead */
+    .step-placeholder img {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 300px;
+      background: #F3F4F6;
+      color: transparent; /* hides alt text */
+    }
+    .step-placeholder img::before {
+      content: '';
+      display: block;
+    }
+
     /* Step 5 — slightly tighter corner radius */
     .radius-16 {
       border-radius: 16px;
@@ -910,7 +924,7 @@
         <h3 class="step-title">Analyze Environmental Risks</h3>
         <p class="step-desc">Get a comprehensive risk assessment for each asset, covering physical climate hazards (flood, drought, heat, wildfire), nature dependencies, and regulatory exposure — powered by IPCC and TNFD science.</p>
       </div>
-      <div class="step-visual"><div class="step-placeholder"><img src="step2-risk.png" alt="Kuyua risk valuation breakdown showing nature value loss of -7.3 million euros across ecosystem service flows, soil organic carbon, biodiversity, and water-related values"></div></div>
+      <div class="step-visual"><div class="step-placeholder"><img src="step1.png" alt="Kuyua risk valuation breakdown showing nature value loss of -7.3 million euros across ecosystem service flows, soil organic carbon, biodiversity, and water-related values"></div></div>
     </div>
 
     <!-- Step 2 -->
@@ -921,7 +935,7 @@
         <h3 class="step-title">Translate Risks Into Financial Impact</h3>
         <p class="step-desc">Convert environmental scores into monetary terms. Understand Value at Risk (VaR), stranded asset exposure, and potential write-downs — aligned with TCFD, TNFD, and CSRD reporting requirements.</p>
       </div>
-      <div class="step-visual"><div class="step-placeholder"><img src="step3-dashboard.png" alt="Kuyua dashboard for REWE Center, Valencia, Spain showing a risk valuation of -7.3 million euros and a valuation breakdown by ecosystem service flow and above-ground biomass"></div></div>
+      <div class="step-visual"><div class="step-placeholder"><img src="step2.png" alt="Kuyua dashboard for REWE Center, Valencia, Spain showing a risk valuation of -7.3 million euros and a valuation breakdown by ecosystem service flow and above-ground biomass"></div></div>
     </div>
 
     <!-- Step 3 -->
@@ -932,7 +946,7 @@
         <h3 class="step-title">Risk Evolution Foresight and Monitoring</h3>
         <p class="step-desc">Track how risks evolve across climate scenarios (1.5°C, 2°C, 4°C). Receive alerts when new hazards emerge and monitor your portfolio's risk trajectory in real time with automated updates.</p>
       </div>
-      <div class="step-visual"><div class="step-placeholder"><img src="step4-risk-evolution.png" alt="Kuyua dashboard showing total nature value of 6,514M, nature value at risk of 3.23M, and a breakdown of nature risk and climate risk across the portfolio"></div></div>
+      <div class="step-visual"><div class="step-placeholder"><img src="step3.png" alt="Kuyua dashboard showing total nature value of 6,514M, nature value at risk of 3.23M, and a breakdown of nature risk and climate risk across the portfolio"></div></div>
     </div>
 
     <!-- Step 4 -->
@@ -943,7 +957,7 @@
         <h3 class="step-title">Act and Report With Confidence</h3>
         <p class="step-desc">Generate audit-ready reports aligned with CSRD, TCFD, TNFD, and EU Taxonomy. Export boardroom-ready decks and regulatory filings with a single click — and turn risk insight into strategic action.</p>
       </div>
-      <div class="step-visual radius-16"><div class="step-placeholder radius-16"><img src="step5-act-report.png" alt="Kuyua dashboard showing 12 new action plans for REWE Center Valencia, with mitigation hierarchy levels and a detailed task list for minimizing soil pollution"></div></div>
+      <div class="step-visual radius-16"><div class="step-placeholder radius-16"><img src="step4.png" alt="Kuyua dashboard showing 12 new action plans for REWE Center Valencia, with mitigation hierarchy levels and a detailed task list for minimizing soil pollution"></div></div>
     </div>
 
   </div>
