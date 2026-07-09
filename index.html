@@ -586,11 +586,18 @@
       transform: translateY(-3px);
     }
 
-    /* News thumbnail placeholder */
+    /* News thumbnail */
     .news-thumb {
-      background: #F3F4F6;
-      aspect-ratio: 2 / 1;
       width: 100%;
+      aspect-ratio: 2 / 1;
+      overflow: hidden;
+    }
+    .news-thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      color: transparent;
     }
 
     .news-body { padding: 20px 22px 24px; }
@@ -1130,7 +1137,7 @@
   <div class="news-grid">
 
     <div class="news-card">
-      <div class="news-thumb"></div>
+      <div class="news-thumb"><img src="news1.jpg" alt="Kuyua joins the TNFD Forum as a Data Provider"></div>
       <div class="news-body">
         <div class="news-cat">Biodiversity</div>
         <div class="news-title">Kuyua joins the TNFD Forum as a Data Provider</div>
@@ -1139,7 +1146,7 @@
     </div>
 
     <div class="news-card">
-      <div class="news-thumb"></div>
+      <div class="news-thumb"><img src="news2.jpg" alt="Understanding Biodiversity and Climate Interdependencies"></div>
       <div class="news-body">
         <div class="news-cat">Climate</div>
         <div class="news-title">Understanding Biodiversity and Climate Interdependencies</div>
@@ -1148,7 +1155,7 @@
     </div>
 
     <div class="news-card">
-      <div class="news-thumb"></div>
+      <div class="news-thumb"><img src="news3.jpg" alt="CSRD Is Here — How Kuyua Helps You Comply"></div>
       <div class="news-body">
         <div class="news-cat">Regulation</div>
         <div class="news-title">CSRD Is Here — How Kuyua Helps You Comply</div>
