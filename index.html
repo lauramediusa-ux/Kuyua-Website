@@ -333,18 +333,23 @@
       background: #F3F4F6;
     }
 
-    /* Hide broken image alt text — show a grey box instead */
+    /* Images always maintain natural proportions */
     .step-placeholder img {
       display: block;
       width: 100%;
       height: auto;
-      min-height: 300px;
-      background: #F3F4F6;
-      color: transparent; /* hides alt text */
+      color: transparent; /* hides alt text when broken */
     }
-    .step-placeholder img::before {
-      content: '';
-      display: block;
+    /* Grey placeholder box shown only when image is missing */
+    .step-placeholder:has(img[src=""]),
+    .step-placeholder img[src$=".png"]:not([naturalWidth]),
+    .step-placeholder {
+      min-height: 0;
+    }
+    .step-placeholder img:not([src]),
+    .step-placeholder img[src=""] {
+      aspect-ratio: 16 / 10;
+      background: #F3F4F6;
     }
 
     /* Step 5 — slightly tighter corner radius */
