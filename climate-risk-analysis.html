@@ -63,11 +63,11 @@
     }
     .hero .section-pill { color: #000; border-color: #000; }
     .hero-title {
-      font-size: clamp(36px, 5vw, 64px);
+      font-size: clamp(30px, 3.4vw, 52px);
       font-weight: 800;
-      line-height: 1.08;
+      line-height: 1.1;
       letter-spacing: -1.5px;
-      max-width: 680px;
+      white-space: nowrap;
       margin: 0 0 22px;
     }
     .hero-desc {
@@ -100,7 +100,14 @@
     .hero-img-wrap {
       /* blends into the grey hero background — no card frame */
     }
-    .hero-img-wrap img { display: block; width: 100%; height: auto; color: transparent; }
+    .hero-img-wrap img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: 92% 45%; /* crops the empty left part of the png, keeps the laptop */
+      color: transparent;
+    }
 
     /* ─── HERO FEATURES ───────────────────────────────── */
     .hero-features-section {
