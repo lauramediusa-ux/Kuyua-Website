@@ -64,7 +64,7 @@
     .hero .section-pill { color: #000; border-color: #000; }
     .hero-title {
       font-size: clamp(30px, 3.4vw, 52px);
-      font-weight: 800;
+      font-weight: 700;
       line-height: 1.1;
       letter-spacing: -1.5px;
       white-space: nowrap;
@@ -99,6 +99,7 @@
     .btn-outline:hover { border-color: #000; }
     .hero-img-wrap {
       /* blends into the grey hero background — no card frame */
+      overflow: hidden;
     }
     .hero-img-wrap img {
       display: block;
@@ -106,6 +107,8 @@
       aspect-ratio: 1 / 1;
       object-fit: cover;
       object-position: 92% 45%; /* crops the empty left part of the png, keeps the laptop */
+      transform: scale(1.45);
+      transform-origin: 78% 48%;
       color: transparent;
     }
 
