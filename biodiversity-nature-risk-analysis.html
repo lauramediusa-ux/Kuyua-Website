@@ -11,11 +11,11 @@
     a { text-decoration: none; color: inherit; }
 
     /* ─── NAVBAR ──────────────────────────────────────── */
-    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 56px; position: sticky; top: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); z-index: 100; transition: box-shadow 0.3s ease; }
-    .navbar.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.09); }
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 56px; position: sticky; top: 0; background: #D9D9D9; z-index: 100; transition: box-shadow 0.3s ease, background 0.3s ease; }
+    .navbar.scrolled { background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); box-shadow: 0 2px 24px rgba(0,0,0,0.09); }
     .navbar-logo svg { height: 28px; width: auto; display: block; }
     .navbar-right { display: flex; align-items: center; gap: 36px; font-family: 'Poppins', sans-serif; }
-    .lang-toggle { display: flex; align-items: center; border: 1.5px solid #000; border-radius: 100px; padding: 4px 6px; gap: 2px; font-size: 13px; font-weight: 500; }
+    .lang-toggle { display: flex; align-items: center; border: 1.5px solid #D9D9D9; border-radius: 100px; padding: 4px 6px; gap: 2px; font-size: 13px; font-weight: 500; }
     .lang-toggle span { padding: 3px 9px; border-radius: 100px; cursor: pointer; }
     .lang-toggle span.active { background: #000; color: #fff; font-weight: 600; }
     .nav-links { display: flex; gap: 28px; font-size: 14px; }
@@ -28,20 +28,27 @@
     .section-pill { display: inline-flex; align-items: center; border: 1.5px solid currentColor; border-radius: 100px; padding: 5px 18px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 28px; }
 
     /* ─── HERO ────────────────────────────────────────── */
-    .hero { background: #fff; color: #000; padding: 80px 56px 0; }
+    /* The png fills the whole section edge-to-edge; text overlays it */
+    .hero {
+      background: #D9D9D9 url('nat-hero.png') center / cover no-repeat;
+      color: #000;
+      aspect-ratio: 2600 / 1541; /* native ratio of the png — shows it fully, no crop */
+      display: flex;
+      align-items: center;
+      padding: 0 56px;
+    }
+    .hero-left { max-width: 720px; }
     .hero .section-pill { color: #000; border-color: #000; }
-    .hero-title { font-size: clamp(36px, 5vw, 64px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; max-width: 680px; margin: 0 0 22px; }
+    .hero-title { font-size: clamp(30px, 3.4vw, 52px); font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; white-space: nowrap; margin: 0 0 22px; }
     .hero-desc { font-size: 16px; font-weight: 400; color: #666; line-height: 1.7; max-width: 540px; margin: 0 0 40px; }
-    .hero-btns { display: flex; align-items: center; justify-content: flex-start; gap: 14px; margin-bottom: 64px; }
+    .hero-btns { display: flex; align-items: center; justify-content: flex-start; gap: 14px; }
     .btn-primary { background: #3AE374; color: #000; border: none; border-radius: 100px; padding: 14px 34px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
     .btn-primary:hover { opacity: .85; }
     .btn-outline { background: transparent; color: #000; border: 1.5px solid rgba(0,0,0,.2); border-radius: 100px; padding: 14px 34px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: border-color .2s; }
     .btn-outline:hover { border-color: #000; }
-    .hero-img-wrap { border-radius: 20px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.12); }
-    .hero-img-wrap img { display: block; width: 100%; height: auto; color: transparent; }
-
     /* ─── HERO FEATURES ───────────────────────────────── */
-    .hero-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; padding: 64px 0 96px; border-top: 1px solid #F0F0F0; margin-top: 64px; }
+    .hero-features-section { background: #fff; padding: 0 56px; }
+    .hero-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; padding: 72px 0 96px; }
     .hero-feat-icon { width: 44px; height: 44px; border-radius: 10px; margin-bottom: 16px; display: block; }
     .hero-feat-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
     .hero-feat-desc { font-size: 13px; color: #666; line-height: 1.65; font-weight: 400; }
@@ -86,7 +93,7 @@
     .cap-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
     .cap-card { border: 1.5px solid #E8E8EA; border-radius: 18px; padding: 36px 32px; transition: box-shadow .2s; }
     .cap-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,.08); }
-    .cap-emoji { font-size: 28px; margin-bottom: 18px; display: block; line-height: 1; }
+    .cap-icon { width: 46px; height: 46px; border-radius: 7px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
     .cap-card-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
     .cap-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
     .cap-list li { font-size: 13.5px; color: #555; display: flex; align-items: center; gap: 9px; font-weight: 400; }
@@ -126,7 +133,8 @@
 
     @media (max-width: 900px) {
       .navbar { padding: 18px 28px; }
-      .hero { padding: 64px 28px 0; }
+      .hero { aspect-ratio: auto; padding: 64px 28px; }
+      .hero-features-section { padding: 0 28px; }
       .hero-features { grid-template-columns: 1fr; }
       .essentials { grid-template-columns: 1fr; gap: 40px; padding: 64px 28px; }
       .why-cards { grid-template-columns: repeat(2, 1fr); }
@@ -161,7 +169,7 @@
     </div>
     <div class="nav-links">
       <a href="#">Contact us</a>
-      <a href="#">jobs</a>
+      <a href="https://app.notion.com/p/Open-jobs-we-re-hiring-2fd6ff49975d80718d16ce3864d6757d" target="_blank" rel="noopener">jobs</a>
       <a href="https://calendly.com/kya-christian/30?month=2026-07" target="_blank" rel="noopener">Book a demo</a>
     </div>
     <button class="btn-login">Log in</button>
@@ -170,17 +178,19 @@
 
 <!-- ══════════════ HERO ══════════════ -->
 <section class="hero">
-  <div class="section-pill">Biodiversity &amp; Nature Risk Analysis</div>
-  <h1 class="hero-title">Nature risk analysis<br>for future-proof<br>business decisions</h1>
-  <p class="hero-desc">Understand how your operations depend on and impact nature — and turn that knowledge into regulatory-ready disclosures and strategic action.</p>
-  <div class="hero-btns">
-    <button class="btn-primary">Request a demo</button>
-    <button class="btn-outline">See how it works</button>
+  <div class="hero-left">
+    <div class="section-pill">Biodiversity &amp; Nature Risk Analysis</div>
+    <h1 class="hero-title">Nature risk analysis<br>for future-proof<br>business decisions</h1>
+    <p class="hero-desc">Understand how your operations depend on and impact nature — and turn that knowledge into regulatory-ready disclosures and strategic action.</p>
+    <div class="hero-btns">
+      <button class="btn-primary">Request a demo</button>
+      <button class="btn-outline">See how it works</button>
+    </div>
   </div>
-  <div class="hero-img-wrap">
-    <img src="feat-nature.png" alt="Kuyua nature risk map showing a site location with biodiversity priority score">
-  </div>
+</section>
 
+<!-- Feature points below hero -->
+<section class="hero-features-section">
   <div class="hero-features">
     <div class="hero-feat">
       <!-- Yellow circle icon — Physical Nature Risks -->
@@ -300,7 +310,7 @@
 
     <div class="cap-cards">
       <div class="cap-card">
-        <span class="cap-emoji">🌿</span>
+        <div class="cap-icon" style="background:#45F974"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#fff" d="M20.5 3.5C20.5 3.5 8 2 4.5 9.5 2.5 13.8 4 18 4 18s.8-5.5 5-8c-2.5 3-3 8.5-3 8.5 4.5 2.5 9.5 1 12-2.5 3-4.2 2.5-12.5 2.5-12.5z"/></svg></div>
         <div class="cap-card-title">Ecosystem services</div>
         <ul class="cap-list">
           <li><div class="cap-bullet"></div>Pollination &amp; crop yield dependency</li>
@@ -309,7 +319,7 @@
         </ul>
       </div>
       <div class="cap-card">
-        <span class="cap-emoji">🦋</span>
+        <div class="cap-icon" style="background:#F5FF66"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><ellipse cx="8" cy="5.5" rx="2.4" ry="3" transform="rotate(-20 8 5.5)"/><ellipse cx="16" cy="5.5" rx="2.4" ry="3" transform="rotate(20 16 5.5)"/><ellipse cx="4.5" cy="11" rx="2.2" ry="2.8" transform="rotate(-45 4.5 11)"/><ellipse cx="19.5" cy="11" rx="2.2" ry="2.8" transform="rotate(45 19.5 11)"/><path d="M12 10c3.5 0 5.5 2.2 5.5 5 0 3.2-2.4 5.5-5.5 5.5S6.5 18.2 6.5 15c0-2.8 2-5 5.5-5z"/></svg></div>
         <div class="cap-card-title">Species &amp; habitats</div>
         <ul class="cap-list">
           <li><div class="cap-bullet"></div>Threatened species proximity</li>
@@ -318,7 +328,7 @@
         </ul>
       </div>
       <div class="cap-card">
-        <span class="cap-emoji">📋</span>
+        <div class="cap-icon" style="background:#D04EFB"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="2.5" width="16" height="19" rx="3" fill="#fff"/><path d="M8 8h8M8 12h8M8 16h4" stroke="#D04EFB" stroke-width="1.8" stroke-linecap="round"/></svg></div>
         <div class="cap-card-title">Regulatory alignment</div>
         <ul class="cap-list">
           <li><div class="cap-bullet"></div>TNFD LEAP methodology</li>
@@ -367,7 +377,7 @@
     </div>
     <div class="ft-right">
       <a href="#" class="ft-nav-link">Contact us</a>
-      <a href="#" class="ft-nav-link">Jobs</a>
+      <a href="https://app.notion.com/p/Open-jobs-we-re-hiring-2fd6ff49975d80718d16ce3864d6757d" target="_blank" rel="noopener" class="ft-nav-link">Jobs</a>
       <a href="https://calendly.com/kya-christian/30?month=2026-07" target="_blank" rel="noopener" class="ft-nav-link">Book a demo</a>
       <a href="#" class="ft-nav-link muted">Imprint &amp; Privacy</a>
       <a href="#" class="ft-linkedin" aria-label="LinkedIn">
