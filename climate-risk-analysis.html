@@ -49,17 +49,18 @@
     }
 
     /* ─── HERO ────────────────────────────────────────── */
+    /* The png fills the whole section edge-to-edge; text overlays it */
     .hero {
-      background: #D9D9D9;
+      background: #D9D9D9 url('clim-hero.png') center / cover no-repeat;
       color: #000;
-      padding: 80px 56px;
-      display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 48px;
+      aspect-ratio: 2600 / 1541; /* native ratio of the png — shows it fully, no crop */
+      display: flex;
       align-items: center;
+      padding: 0 56px;
     }
+    .hero-left { max-width: 720px; }
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; padding: 64px 28px; }
+      .hero { aspect-ratio: auto; padding: 64px 28px; }
     }
     .hero .section-pill { color: #000; border-color: #000; }
     .hero-title {
@@ -97,21 +98,6 @@
       transition: border-color .2s;
     }
     .btn-outline:hover { border-color: #000; }
-    .hero-img-wrap {
-      /* blends into the grey hero background — no card frame */
-      overflow: hidden;
-    }
-    .hero-img-wrap img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      object-position: 92% 45%; /* crops the empty left part of the png, keeps the laptop */
-      transform: scale(1.18);
-      transform-origin: 80% 50%;
-      color: transparent;
-    }
-
     /* ─── HERO FEATURES ───────────────────────────────── */
     .hero-features-section {
       background: #fff;
@@ -406,9 +392,6 @@
       <button class="btn-primary">Request a demo</button>
       <button class="btn-outline">See how it works</button>
     </div>
-  </div>
-  <div class="hero-img-wrap">
-    <img src="clim-hero.png" alt="Kuyua Business Risks dashboard on a laptop">
   </div>
 </section>
 
