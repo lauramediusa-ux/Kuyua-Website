@@ -9,7 +9,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Poppins', Helvetica, Arial, sans-serif;
       background: #fff;
       color: #000;
       line-height: 1.5;
@@ -47,7 +47,7 @@
     .lang-toggle {
       display: flex;
       align-items: center;
-      border: 1.5px solid #000;
+      border: 1.5px solid #D9D9D9;
       border-radius: 100px;
       padding: 4px 6px;
       gap: 2px;
@@ -98,6 +98,7 @@
     }
 
     .hero-headline {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: clamp(52px, 8vw, 108px);
       font-weight: 400;
       line-height: 1.07;
@@ -122,23 +123,27 @@
       display: block;
     }
 
-    /* The € chip in the subheading */
+    /* The € chip in the subheading — precise white square with soft shadow */
     .chip-eur {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: #E5E7EB;
-      border-radius: 8px;
-      padding: 2px 8px;
+      width: 1.3em;
+      height: 1.3em;
+      background: #fff;
+      border-radius: 0.32em;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06);
       font-size: 0.75em;
-      color: #444;
+      font-weight: 600;
+      color: #C2C2C2;
       vertical-align: middle;
-      margin: 0 4px;
+      margin: 0 6px;
       position: relative;
       top: -0.05em;
     }
 
     .hero-sub {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: clamp(20px, 2.8vw, 34px);
       color: #C2C2C2;
       letter-spacing: -0.3px;
@@ -241,10 +246,10 @@
     }
 
     .how-section > h2 {
-      font-size: clamp(40px, 5.5vw, 76px);
-      font-weight: 400;
+      font-size: clamp(30px, 4.5vw, 58px);
+      font-weight: 800;
       text-align: center;
-      letter-spacing: -2px;
+      letter-spacing: -1px;
       line-height: 1.08;
       margin-bottom: 100px;
     }
@@ -336,11 +341,12 @@
       background: #F3F4F6;
     }
 
-    /* Images always maintain natural proportions */
+    /* All step images render at the same fixed proportion (3:2) */
     .step-placeholder img {
       display: block;
       width: 100%;
-      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
       color: transparent; /* hides alt text when broken */
     }
     /* Grey placeholder box shown only when image is missing */
@@ -538,12 +544,14 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
+      width: 46px;
       font-family: 'Poppins', sans-serif;
       font-size: 10px;
       font-weight: 600;
       color: #AAA;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      white-space: nowrap;
     }
 
     .comp-icon {
@@ -791,20 +799,24 @@
       animation: kuyua-fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-delay: 1.5s;
     }
+    /* Hero image + popup reveal on scroll */
     .hero-placeholder-wrap {
-      animation: kuyua-fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: 1.7s;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
-
-    /* Pop-up card pops in once the hero image has settled */
-    @keyframes hero-popup-in {
-      from { opacity: 0; transform: translateY(calc(-50% + 20px)) scale(0.92); }
-      to   { opacity: 1; transform: translateY(-50%) scale(1); }
+    .hero-placeholder-wrap.is-visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     .hero-popup {
       opacity: 0;
-      animation: hero-popup-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: 2.6s;
+      transform: translateY(calc(-50% + 20px)) scale(0.92);
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+    }
+    .hero-placeholder-wrap.is-visible .hero-popup {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
     }
 
     /* ─── HERO HEADLINE REVEAL ──────────────────────── */
@@ -953,13 +965,13 @@
 
   <div class="navbar-right">
     <div class="lang-toggle">
-      <span class="active">🇬🇧</span>
-      <span>🇩🇪</span>
-      <span>🇫🇷</span>
+      <span class="active">EN</span>
+      <span>DE</span>
+      <span>FR</span>
     </div>
     <div class="nav-links">
       <a href="#">Contact us</a>
-      <a href="#">jobs</a>
+      <a href="https://app.notion.com/p/Open-jobs-we-re-hiring-2fd6ff49975d80718d16ce3864d6757d" target="_blank" rel="noopener">jobs</a>
       <a href="https://calendly.com/kya-christian/30?month=2026-07" target="_blank" rel="noopener">Book a demo</a>
     </div>
     <button class="btn-login">Log in</button>
@@ -1008,7 +1020,7 @@
 
 <!-- ════════════════════ HOW DOES IT WORK ════════════════════ -->
 <section class="how-section">
-  <h2>How does<br>it work?</h2>
+  <h2>How does it work?</h2>
 
   <div class="steps-list">
 
@@ -1060,7 +1072,7 @@
 </section>
 
 <!-- ════════════════════ REVIEWS ════════════════════ -->
-<section class="reviews">
+<section class="reviews" style="display:none;"><!-- hidden for now, remove display:none to bring back -->
   <div class="reviews-inner">
     <div class="reviews-header">
       <div class="section-pill">What our clients say</div>
@@ -1197,17 +1209,17 @@
 
 <!-- ════════════════════ COMPLIANCE ════════════════════ -->
 <div class="compliance-bar">
-  <div class="comp-item"><div class="comp-icon">🌿</div>TNFD</div>
-  <div class="comp-item"><div class="comp-icon">📊</div>TCFD</div>
-  <div class="comp-item"><div class="comp-icon">🇪🇺</div>CSRD</div>
-  <div class="comp-item"><div class="comp-icon">♻️</div>EU Taxonomy</div>
-  <div class="comp-item"><div class="comp-icon">🎯</div>SFDR</div>
-  <div class="comp-item"><div class="comp-icon">🌐</div>GRI</div>
-  <div class="comp-item"><div class="comp-icon">📋</div>ESRS</div>
+  <div class="comp-item"><div class="comp-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#555" d="M20.5 3.5C20.5 3.5 8 2 4.5 9.5 2.5 13.8 4 18 4 18s.8-5.5 5-8c-2.5 3-3 8.5-3 8.5 4.5 2.5 9.5 1 12-2.5 3-4.2 2.5-12.5 2.5-12.5z"/></svg></div>TNFD</div>
+  <div class="comp-item"><div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="#555"><rect x="3" y="13" width="4.5" height="8" rx="2.25"/><rect x="9.75" y="8" width="4.5" height="13" rx="2.25"/><rect x="16.5" y="3" width="4.5" height="18" rx="2.25"/></svg></div>TCFD</div>
+  <div class="comp-item"><div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="#555" stroke-width="5"/></svg></div>CSRD</div>
+  <div class="comp-item"><div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="#555"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2" fill-opacity="0.45"/><rect x="4" y="13" width="7" height="7" rx="2" fill-opacity="0.45"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></div>EU Taxonomy</div>
+  <div class="comp-item"><div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6"/><path d="M10 6h8v8"/></svg></div>SFDR</div>
+  <div class="comp-item"><div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#555"/><ellipse cx="12" cy="12" rx="4" ry="9.5" fill="none" stroke="#F5F5F5" stroke-width="1.8"/><path d="M2.5 12h19" stroke="#F5F5F5" stroke-width="1.8" stroke-linecap="round"/></svg></div>GRI</div>
+  <div class="comp-item"><div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24"><rect x="4" y="2.5" width="16" height="19" rx="3" fill="#555"/><path d="M8 8h8M8 12h8M8 16h4" stroke="#F5F5F5" stroke-width="1.8" stroke-linecap="round"/></svg></div>ESRS</div>
 </div>
 
 <!-- ════════════════════ NEWSROOM ════════════════════ -->
-<section class="newsroom">
+<section class="newsroom" style="display:none;"><!-- hidden for now, remove display:none to bring back -->
   <div class="newsroom-header">Kuyua Newsroom</div>
   <div class="news-grid">
 
@@ -1269,7 +1281,7 @@
     <!-- Right: nav links + LinkedIn -->
     <div class="ft-right">
       <a href="#" class="ft-nav-link">Contact us</a>
-      <a href="#" class="ft-nav-link">Jobs</a>
+      <a href="https://app.notion.com/p/Open-jobs-we-re-hiring-2fd6ff49975d80718d16ce3864d6757d" target="_blank" rel="noopener" class="ft-nav-link">Jobs</a>
       <a href="https://calendly.com/kya-christian/30?month=2026-07" target="_blank" rel="noopener" class="ft-nav-link">Book a demo</a>
       <a href="#" class="ft-nav-link muted">Imprint &amp; Privacy</a>
       <a href="#" class="ft-linkedin" aria-label="LinkedIn">
@@ -1313,6 +1325,23 @@
     el.classList.add(cls);
     if (delay) el.style.transitionDelay = delay;
     io.observe(el);
+  }
+
+  // Hero image + popup: reveal only after the user actually scrolls
+  // (waits for a real scroll event, then checks the image is in view)
+  var heroWrap = document.querySelector('.hero-placeholder-wrap');
+  if (heroWrap) {
+    var heroIo = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          heroIo.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5, rootMargin: '0px 0px -10% 0px' });
+    window.addEventListener('scroll', function() {
+      heroIo.observe(heroWrap);
+    }, { once: true, passive: true });
   }
 
   // Logos
