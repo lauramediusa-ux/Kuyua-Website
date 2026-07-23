@@ -22,15 +22,14 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 56px;
       position: sticky; top: 0;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(10px);
+      background: #D4D4D4;
       z-index: 100;
-      transition: box-shadow 0.3s ease;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
     }
-    .navbar.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.09); }
+    .navbar.scrolled { background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); box-shadow: 0 2px 24px rgba(0,0,0,0.09); }
     .navbar-logo svg { height: 28px; width: auto; display: block; }
     .navbar-right { display: flex; align-items: center; gap: 36px; font-family: 'Poppins', sans-serif; }
-    .lang-toggle { display: flex; align-items: center; border: 1.5px solid #000; border-radius: 100px; padding: 4px 6px; gap: 2px; font-size: 13px; font-weight: 500; }
+    .lang-toggle { display: flex; align-items: center; border: 1.5px solid #D9D9D9; border-radius: 100px; padding: 4px 6px; gap: 2px; font-size: 13px; font-weight: 500; }
     .lang-toggle span { padding: 3px 9px; border-radius: 100px; cursor: pointer; }
     .lang-toggle span.active { background: #000; color: #fff; font-weight: 600; }
     .nav-links { display: flex; gap: 28px; font-size: 14px; }
@@ -51,9 +50,16 @@
 
     /* ─── HERO ────────────────────────────────────────── */
     .hero {
-      background: #fff;
+      background: #D4D4D4;
       color: #000;
-      padding: 80px 56px 0;
+      padding: 80px 56px;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 64px 28px; }
     }
     .hero .section-pill { color: #000; border-color: #000; }
     .hero-title {
@@ -72,7 +78,7 @@
     }
     .hero-btns {
       display: flex; align-items: center; justify-content: flex-start;
-      gap: 14px; margin-bottom: 64px;
+      gap: 14px;
     }
     .btn-primary {
       background: #3AE374; color: #000;
@@ -92,21 +98,24 @@
     }
     .btn-outline:hover { border-color: #000; }
     .hero-img-wrap {
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 24px 64px rgba(0,0,0,.12);
-      margin-bottom: 0;
+      /* blends into the grey hero background — no card frame */
     }
     .hero-img-wrap img { display: block; width: 100%; height: auto; color: transparent; }
 
     /* ─── HERO FEATURES ───────────────────────────────── */
+    .hero-features-section {
+      background: #fff;
+      padding: 0 56px;
+    }
     .hero-features {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 48px;
-      padding: 64px 0 96px;
-      border-top: 1px solid #F0F0F0;
-      margin-top: 64px;
+      padding: 72px 0 96px;
+    }
+    @media (max-width: 900px) {
+      .hero-features-section { padding: 0 28px; }
+      .hero-features { grid-template-columns: 1fr; }
     }
     .hero-feat-icon {
       width: 44px; height: 44px; border-radius: 10px;
@@ -370,7 +379,7 @@
     </div>
     <div class="nav-links">
       <a href="#">Contact us</a>
-      <a href="#">jobs</a>
+      <a href="https://app.notion.com/p/Open-jobs-we-re-hiring-2fd6ff49975d80718d16ce3864d6757d" target="_blank" rel="noopener">jobs</a>
       <a href="https://calendly.com/kya-christian/30?month=2026-07" target="_blank" rel="noopener">Book a demo</a>
     </div>
     <button class="btn-login">Log in</button>
@@ -379,18 +388,22 @@
 
 <!-- ══════════════ HERO ══════════════ -->
 <section class="hero">
-  <div class="section-pill">Climate Risks Analysis</div>
-  <h1 class="hero-title">Climate risk analysis<br>for informed<br>business decisions</h1>
-  <p class="hero-desc">Understand how climate risks impact your operations and supply chain — and translate them into clear, actionable insights.</p>
-  <div class="hero-btns">
-    <button class="btn-primary">Request a demo</button>
-    <button class="btn-outline">See how it works</button>
+  <div class="hero-left">
+    <div class="section-pill">Climate Risks Analysis</div>
+    <h1 class="hero-title">Climate risk analysis<br>for informed business<br>decisions</h1>
+    <p class="hero-desc">Understand how climate risks impact your operations and supply chain — and translate them into clear, actionable insights.</p>
+    <div class="hero-btns">
+      <button class="btn-primary">Request a demo</button>
+      <button class="btn-outline">See how it works</button>
+    </div>
   </div>
   <div class="hero-img-wrap">
-    <img src="feat-climate.png" alt="Kuyua Business Risks dashboard showing climate and nature risk scores">
+    <img src="clim-hero.png" alt="Kuyua Business Risks dashboard on a laptop">
   </div>
+</section>
 
-  <!-- Feature points below image -->
+<!-- Feature points below hero -->
+<section class="hero-features-section">
   <div class="hero-features">
     <div class="hero-feat">
       <svg class="hero-feat-icon" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88.7945" height="88.7945" rx="13.0773" fill="#66F0FF"/><circle cx="44.3966" cy="44.3973" r="22.5881" fill="#66F0FF" stroke="white" stroke-width="16.6717"/></svg>
@@ -580,7 +593,7 @@
     </div>
     <div class="ft-right">
       <a href="#" class="ft-nav-link">Contact us</a>
-      <a href="#" class="ft-nav-link">Jobs</a>
+      <a href="https://app.notion.com/p/Open-jobs-we-re-hiring-2fd6ff49975d80718d16ce3864d6757d" target="_blank" rel="noopener" class="ft-nav-link">Jobs</a>
       <a href="https://calendly.com/kya-christian/30?month=2026-07" target="_blank" rel="noopener" class="ft-nav-link">Book a demo</a>
       <a href="#" class="ft-nav-link muted">Imprint &amp; Privacy</a>
       <a href="#" class="ft-linkedin" aria-label="LinkedIn">
