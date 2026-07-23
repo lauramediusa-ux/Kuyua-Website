@@ -341,12 +341,11 @@
       background: #F3F4F6;
     }
 
-    /* All step images render at the same fixed proportion (3:2) */
+    /* Step frames adapt to the image's native proportions */
     .step-placeholder img {
       display: block;
       width: 100%;
-      aspect-ratio: 3 / 2;
-      object-fit: cover;
+      height: auto;
       color: transparent; /* hides alt text when broken */
     }
     /* Grey placeholder box shown only when image is missing */
